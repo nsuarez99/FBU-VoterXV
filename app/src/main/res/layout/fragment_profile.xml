@@ -8,12 +8,14 @@
 
     <ImageView
         android:id="@+id/signupPic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="142dp"
+        android:layout_height="142dp"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="35dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="42dp"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:background="#CACACA"
+        android:scaleType="fitCenter"
+        app:srcCompat="@android:drawable/ic_menu_camera" />
 
     <TextView
         android:id="@+id/party"
@@ -53,13 +55,13 @@
 
     <EditText
         android:id="@+id/signupAge"
-        android:layout_width="wrap_content"
+        android:layout_width="125dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/signupParty"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="17dp"
+        android:layout_marginStart="6dp"
         android:layout_marginTop="17dp"
-        android:layout_marginEnd="125dp"
+        android:layout_marginEnd="56dp"
         android:layout_toEndOf="@+id/age"
         android:inputType="number"
         android:textSize="16dp"
@@ -75,6 +77,18 @@
         android:layout_marginBottom="25dp"
         android:onClick="saveProfile"
         android:text="Save" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="359dp"
+        android:layout_height="310dp"
+        android:layout_above="@+id/button"
+        android:layout_below="@+id/signupPic"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="53dp"
+        android:layout_marginBottom="38dp"
+        app:srcCompat="@android:drawable/ic_menu_mapmode" />
 
 
 </RelativeLayout>
