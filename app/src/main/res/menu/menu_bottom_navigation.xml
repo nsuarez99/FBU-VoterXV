@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/officials"
+        android:icon="@drawable/ic_launcher_foreground"
+        app:showAsAction="always"
+        android:title="My Officials" />
+
+    <item
+        android:id="@+id/elections"
+        android:icon="@android:drawable/checkbox_on_background"
+        android:title="Upcoming Elections"
+        app:showAsAction="always" />
+
+</menu>

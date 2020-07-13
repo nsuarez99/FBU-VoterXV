@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp"
+    tools:context=".LoginActivity">
+
+
+    <ImageView
+        android:id="@+id/loginLogo"
+        android:layout_width="273dp"
+        android:layout_height="93dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        app:srcCompat="@android:mipmap/sym_def_app_icon" />
+
+    <EditText
+        android:id="@+id/signupUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/loginLogo"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:hint="username"
+        app:layout_constraintTop_toBottomOf="@+id/signupPassword" />
+
+    <EditText
+        android:id="@+id/signupPassword"
+        android:layout_below="@+id/signupUsername"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="16dp"
+        android:hint="password"
+        android:inputType="textPassword"
+        tools:layout_editor_absoluteY="40dp" />
+
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_below="@+id/signupPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="16dp"
+        android:layout_centerHorizontal="true"
+        android:background="#405DE6"
+        android:onClick="loginClick"
+        android:text="Login" />
+
+    <TextView
+        android:id="@+id/signupText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/loginButton"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:text="If you do no have an account click below:"
+        app:layout_constraintTop_toBottomOf="@+id/signupPassword" />
+
+    <Button
+        android:id="@+id/signupButton"
+        android:layout_below="@+id/signupText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginRight="16dp"
+        android:layout_centerHorizontal="true"
+        android:background="#82cc68"
+        android:onClick="signupClick"
+        android:text="SignUp" />
+
+
+</RelativeLayout>
