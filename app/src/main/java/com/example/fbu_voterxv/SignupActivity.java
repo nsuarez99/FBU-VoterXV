@@ -1,6 +1,7 @@
 package com.example.fbu_voterxv;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.fbu_voterxv.fragments.ProfileFragment;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -45,15 +47,18 @@ public class SignupActivity extends AppCompatActivity {
         user.setUsername(username);
         user.setPassword(password);
         user.setEmail(email);
+
         // Invoke signUpInBackground
         user.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {
                 if (e == null) {
                     Toast.makeText(SignupActivity.this, "Created Account", Toast.LENGTH_SHORT);
                     Log.i(TAG, "Succesfully created user");
-                    Intent i = new Intent(SignupActivity.this, ProfileActivity.class);
+                    Intent i = new Intent(SignupActivity.this, MainActivity.class);
+                    i.putExtra("signup", true);
                     startActivity(i);
                     finish();
+
                 } else {
                     Log.e(TAG, "Error while creating user", e);
                     Toast.makeText(SignupActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();

@@ -4,13 +4,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/officials"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/officials"
         app:showAsAction="always"
-        android:title="My Officials" />
+        android:title="My Officials"
+        />
 
     <item
         android:id="@+id/elections"
-        android:icon="@android:drawable/checkbox_on_background"
+        android:icon="@drawable/election"
         android:title="Upcoming Elections"
         app:showAsAction="always" />
 
