@@ -1,6 +1,7 @@
 package com.example.fbu_voterxv.models;
 
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 public abstract class Politician {
 
@@ -24,6 +25,8 @@ public abstract class Politician {
         this.fb = fb;
         this.twitter = twitter;
     }
+
+    public Politician() {}
 
     public String getName() {
         return name;

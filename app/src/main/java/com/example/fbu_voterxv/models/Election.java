@@ -1,15 +1,19 @@
 package com.example.fbu_voterxv.models;
 
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.List;
 
+@Parcel
 public class Election {
 
     public static final String TAG = "Election";
     private String title;
     private String date;
     private List<Candidate> candidates;
+
+    public Election(){}
 
     public Election(String title, String date, List<Candidate> candidates) {
         this.title = title;
