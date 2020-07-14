@@ -1,5 +1,6 @@
 package com.example.fbu_voterxv.models;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.parceler.Parcel;
 
@@ -35,5 +36,9 @@ public class Election {
 
 //    public static Election fromJson(JSONObject jsonObject){
 //        //TODO parse election data from JSON
+//    }
+
+//    public static List<Election> fromJsonArray(JSONArray jsonArray){
+//        //TODO parse elections data into election array
 //    }
 }
