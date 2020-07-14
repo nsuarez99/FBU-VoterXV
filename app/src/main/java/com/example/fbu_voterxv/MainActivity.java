@@ -6,7 +6,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -63,10 +62,10 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 Fragment fragment;
                 switch (menuItem.getItemId()) {
-                    case R.id.officials:
+                    case R.id.officialsIcon:
                         fragment = officialsFragment;
                         break;
-                    case R.id.elections:
+                    case R.id.electionsIcon:
                         fragment = electionsFragment;
                         break;
                     default:
@@ -77,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        bottomNavigationView.setSelectedItemId(R.id.officials);
+        bottomNavigationView.setSelectedItemId(R.id.officialsIcon);
 
 
         //set up profile image click to profile fragment

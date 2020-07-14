@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/officials"
+        android:id="@+id/officialsIcon"
         android:icon="@drawable/officials"
         app:showAsAction="always"
         android:title="My Officials"
         />
 
     <item
-        android:id="@+id/elections"
+        android:id="@+id/electionsIcon"
         android:icon="@drawable/election"
         android:title="Upcoming Elections"
         app:showAsAction="always" />
