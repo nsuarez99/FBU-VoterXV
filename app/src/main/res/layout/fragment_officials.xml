@@ -1,14 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.OfficialsFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="hello_officials_fragment" />
+        android:fillViewport="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/executiveTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="6dp"
+                    android:text="Executive"
+                    android:textAlignment="center"
+                    android:textSize="30sp" />
+
+                <ImageView
+                    android:id="@+id/presidentImage"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_below="@+id/executiveTitle"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="10dp"
+                    app:srcCompat="@drawable/officials" />
+
+                <TextView
+                    android:id="@+id/presidentName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/presidentImage"
+                    android:layout_alignStart="@+id/presidentImage"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Barack Obama" />
+
+                <TextView
+                    android:id="@+id/presidentParty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/presidentName"
+                    android:layout_alignStart="@+id/presidentName"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="4dp"
+                    android:text="Democrat"/>
+
+                <ImageView
+                    android:id="@+id/vicePresidentImage"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_below="@+id/executiveTitle"
+                    android:layout_marginStart="67dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/presidentImage"
+                    android:src="@drawable/officials"/>
+
+                <TextView
+                    android:id="@+id/vicePresidentName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/vicePresidentImage"
+                    android:layout_alignStart="@+id/vicePresidentImage"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Barack Obama" />
+
+                <TextView
+                    android:id="@+id/vicePresidentParty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/vicePresidentName"
+                    android:layout_alignStart="@+id/vicePresidentName"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="4dp"
+                    android:text="Democrat" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/senatorTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="6dp"
+                    android:text="Senators"
+                    android:textAlignment="center"
+                    android:textSize="30sp" />
+
+                <ImageView
+                    android:id="@+id/senatorSrImage"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_below="@+id/senatorTitle"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/officials" />
+
+                <TextView
+                    android:id="@+id/senatorSrName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/senatorSrImage"
+                    android:layout_alignStart="@+id/senatorSrImage"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Barack Obama" />
+
+                <TextView
+                    android:id="@+id/seniorSrParty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/senatorSrName"
+                    android:layout_alignStart="@+id/senatorSrName"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="4dp"
+                    android:text="Democrat" />
+
+                <ImageView
+                    android:id="@+id/senatorJrImage"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_below="@+id/senatorTitle"
+                    android:layout_marginStart="67dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/senatorSrImage"
+                    android:src="@drawable/officials" />
+
+                <TextView
+                    android:id="@+id/senatorJrName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/senatorJrImage"
+                    android:layout_alignStart="@+id/senatorJrImage"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Barack Obama" />
+
+                <TextView
+                    android:id="@+id/senatorJrParty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/senatorJrName"
+                    android:layout_alignStart="@+id/senatorJrName"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="4dp"
+                    android:text="Democrat" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/congressmanTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="6dp"
+                    android:text="Congressman"
+                    android:textAlignment="center"
+                    android:textSize="30sp"/>
+
+                <ImageView
+                    android:id="@+id/congressmanImage"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_below="@+id/congressmanTitle"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/officials" />
+
+                <TextView
+                    android:id="@+id/congressmanName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/congressmanImage"
+                    android:layout_centerInParent="true"
+                    android:text="Barack Obama" />
+
+                <TextView
+                    android:id="@+id/congressmanParty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/congressmanName"
+                    android:layout_centerInParent="true"
+                    android:text="Democrat" />
+            </RelativeLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>
