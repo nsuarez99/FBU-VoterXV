@@ -8,16 +8,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.os.Parcel;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.fbu_voterxv.MainActivity;
 import com.example.fbu_voterxv.R;
 import com.example.fbu_voterxv.adapters.ElectionAdapter;
+import com.example.fbu_voterxv.models.Candidate;
 import com.example.fbu_voterxv.models.Election;
 
 import org.parceler.Parcels;
@@ -47,7 +45,7 @@ public class ElectionsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView);
 
         final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        final Fragment candidatesFragment = new CandidatesFragment();
+        final Fragment candidatesFragment = new CandidatesListFragment();
 
         //setup recyclerview onclick listener
         ElectionAdapter.OnClickListener onClickListener = new ElectionAdapter.OnClickListener() {
@@ -60,7 +58,7 @@ public class ElectionsFragment extends Fragment {
                 fragmentManager.beginTransaction().replace(R.id.frameLayoutContainer, candidatesFragment).commit();
             }
         };
-
+        
         //set adapter and recycler view
         elections = new ArrayList<>();
         adapter = new ElectionAdapter(getContext(), elections, onClickListener);
@@ -68,6 +66,12 @@ public class ElectionsFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
+        //TODO get rid of test election
+        List<Candidate> candidates = new ArrayList<>();
+        candidates.add(new Candidate("Test name", 99, "https://i.pinimg.com/originals/80/8c/65/808c65ecb9ecce89e5b52cff5f45af5e.png", "Democrat", "gender", "website", "fb", "twitter", "money_raised"));
+        candidates.add(new Candidate("Test name 2", 99, "https://i.pinimg.com/originals/80/8c/65/808c65ecb9ecce89e5b52cff5f45af5e.png", "Democrat", "gender", "website", "fb", "twitter", "money_raised"));
+        elections.add(new Election("test election", "0/0/0000", candidates));
+        adapter.addAll(elections);
 
         //TODO add endless scrolling
 //        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
