@@ -58,7 +58,7 @@ public class ElectionsFragment extends Fragment {
                 fragmentManager.beginTransaction().replace(R.id.frameLayoutContainer, candidatesFragment).commit();
             }
         };
-        
+
         //set adapter and recycler view
         elections = new ArrayList<>();
         adapter = new ElectionAdapter(getContext(), elections, onClickListener);
