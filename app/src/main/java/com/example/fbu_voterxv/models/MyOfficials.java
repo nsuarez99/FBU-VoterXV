@@ -1,5 +1,8 @@
 package com.example.fbu_voterxv.models;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class MyOfficials {
 
     public static final String TAG = "MyOfficials";
@@ -8,6 +11,8 @@ public class MyOfficials {
     public Representative seniorSenator;
     public Representative juniorSenator;
     public Representative congressman;
+
+    public MyOfficials(){}
 
     public MyOfficials(Representative president, Representative vicePresident, Representative seniorSenator, Representative juniorSenator, Representative congressman) {
         this.president = president;

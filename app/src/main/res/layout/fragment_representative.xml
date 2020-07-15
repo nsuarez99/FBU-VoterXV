@@ -92,8 +92,10 @@
         android:id="@+id/repPlaceholder"
         android:layout_width="wrap_content"
         android:layout_height="279dp"
+        android:layout_below="@+id/representativeImage"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="42dp"
         android:layout_marginBottom="97dp"
         android:src="@drawable/placeholder" />
 

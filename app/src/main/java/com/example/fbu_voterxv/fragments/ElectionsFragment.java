@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.fbu_voterxv.MainActivity;
 import com.example.fbu_voterxv.R;
 import com.example.fbu_voterxv.adapters.ElectionAdapter;
 import com.example.fbu_voterxv.models.Election;

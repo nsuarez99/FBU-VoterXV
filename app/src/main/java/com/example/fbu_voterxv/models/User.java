@@ -1,10 +1,13 @@
 package com.example.fbu_voterxv.models;
 
+import org.parceler.Parcel;
+
 import java.util.List;
 
+@Parcel
 public class User {
 
-    public static final String TAG = "Candidate";
+    public static final String TAG = "User";
     private String username;
     private String email;
     private String party;
@@ -14,6 +17,8 @@ public class User {
     private String district;
     private MyOfficials officials;
     private List<Election> electionsList;
+
+    public User(){}
 
     public User(String username, String email, String party, String image, String address, String state, String district, MyOfficials officials, List<Election> electionsList) {
         this.username = username;

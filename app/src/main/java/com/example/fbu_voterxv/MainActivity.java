@@ -17,7 +17,14 @@ import com.example.fbu_voterxv.fragments.ElectionsFragment;
 import com.example.fbu_voterxv.fragments.OfficialsFragment;
 import com.example.fbu_voterxv.fragments.ProfileFragment;
 import com.example.fbu_voterxv.fragments.SettingsFragment;
+import com.example.fbu_voterxv.models.Election;
+import com.example.fbu_voterxv.models.MyOfficials;
+import com.example.fbu_voterxv.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import org.parceler.Parcels;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ImageView profileImage;
     private BottomNavigationView bottomNavigationView;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Create my user object with election and officials data
+        user = populateUser();
+
         //set up bottom navigation
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -73,6 +84,13 @@ public class MainActivity extends AppCompatActivity {
                         fragment = officialsFragment;
                         break;
                 }
+
+                //pass user data with fragment
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("user", Parcels.wrap(user));
+                fragment.setArguments(bundle);
+
+                //set fragment
                 fragmentManager.beginTransaction().replace(R.id.frameLayoutContainer, fragment).commit();
                 return true;
             }
@@ -94,6 +112,11 @@ public class MainActivity extends AppCompatActivity {
         if(getIntent().getBooleanExtra("signup", false)){
             fragmentManager.beginTransaction().replace(R.id.frameLayoutContainer, profileFragment).commit();
         }
+    }
+
+    //TODO create method to query API and populate user object
+    private User populateUser() {
+        return new User();
     }
 
     // Menu icons are inflated just as they were with actionbar
