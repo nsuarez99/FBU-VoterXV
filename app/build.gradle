@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
 
+def apikeyPropertiesFile = rootProject.file("apikey.properties")
+def apikeyProperties = new Properties()
+apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.0"
@@ -12,6 +16,11 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.officials.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "GOOGLE_KEY", apikeyProperties['GOOGLE_KEY'])
+        buildConfigField("String", "FEC_KEY", apikeyProperties['FEC_KEY'])
+        buildConfigField("String", "PROPPUBLICA_KEY", apikeyProperties['PROPPUBLICA_KEY'])
+
     }
 
     buildTypes {

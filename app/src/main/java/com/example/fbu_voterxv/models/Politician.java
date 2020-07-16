@@ -3,7 +3,8 @@ package com.example.fbu_voterxv.models;
 import org.json.JSONObject;
 import org.parceler.Parcel;
 
-public abstract class Politician {
+@Parcel
+public class Politician {
 
     public static final String TAG = "Representative";
     String name;
@@ -60,4 +61,35 @@ public abstract class Politician {
         return twitter;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
+    public void setParty(String party) {
+        this.party = party;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public void setFb(String fb) {
+        this.fb = fb;
+    }
+
+    public void setTwitter(String twitter) {
+        this.twitter = twitter;
+    }
 }

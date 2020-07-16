@@ -12,7 +12,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.example.fbu_voterxv.apis.GoogleAPI;
 import com.example.fbu_voterxv.fragments.ElectionsFragment;
 import com.example.fbu_voterxv.fragments.OfficialsFragment;
 import com.example.fbu_voterxv.fragments.ProfileFragment;
@@ -135,6 +137,9 @@ public class MainActivity extends AppCompatActivity {
         user.setParty(parseUser.getString("party"));
         user.setAge(parseUser.getInt("age"));
         user.setImage(parseUser.getParseFile("image"));
+
+        GoogleAPI.setMyOfficials(user);
+
     }
 
     // Menu icons are inflated just as they were with actionbar

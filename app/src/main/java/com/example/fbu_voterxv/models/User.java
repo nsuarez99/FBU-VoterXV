@@ -142,8 +142,8 @@ public class User {
         for (int i = 0; i < officesArray.length(); i++){
             JSONObject office = officesArray.getJSONObject(i);
             if (office.getString("name").equals("U.S. Representative")){
-                int index = office.getString("divisionID").indexOf("cd:");
-                district = office.getString("divisionID").substring(index + 3);
+                int index = office.getString("divisionId").indexOf("cd:");
+                district = office.getString("divisionId").substring(index + 3);
                 return;
             }
         }
