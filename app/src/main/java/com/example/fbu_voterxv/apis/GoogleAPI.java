@@ -15,6 +15,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import okhttp3.Headers;
 
 public class GoogleAPI {
@@ -27,23 +32,23 @@ public class GoogleAPI {
     public static void setMyOfficials(final User user) {
         final String URL = BASE_URL + "representatives";
         AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
-        params.put("key", KEY);
-        params.put("address", user.getAddress());
-        params.put("levels", "country");
-        params.put("roles", "legislatorLowerBody");
-        client.get(URL, params, new JsonHttpResponseHandler() {
+
+        //TODO figure out if can split this into parameter without roles overrideing
+        String complete = URL + "?address=" + user.getAddress() + "&levels=country&roles=legislatorLowerBody&roles=legislatorUpperBody&roles=headOfGovernment&roles=deputyHeadOfGovernment&key=" + KEY;
+
+        client.get(complete, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.d(TAG, "onSuccess setMyOfficials");
                 JSONObject jsonObject = json.jsonObject;
                 try{
                     user.setDistrict(jsonObject);
-//                    user.setOfficials(MyOfficials.fromJsonObject(jsonObject));
-                    Log.i(TAG, user.getDistrict());
+                    user.setOfficials(MyOfficials.fromJsonObject(jsonObject));
+                    Log.i(TAG, user.getOfficials().toString());
                 }
                 catch (JSONException e){
                     Log.e(TAG, "Hit json exception while parcing, error: " + e);
+                    e.printStackTrace();
                 }
             }
 

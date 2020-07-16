@@ -6,7 +6,7 @@ import org.parceler.Parcel;
 public class Representative extends Politician{
 
     public static final String TAG = "Representative";
-    private String committee;
+    private String committee = "N/A";
 
     public Representative(){}
 
@@ -19,8 +19,8 @@ public class Representative extends Politician{
         return committee;
     }
 
-    //    public static Representative fromJson(JSONObject jsonObject){
-//        //TODO parse election data from JSON
-//    }
+    public void setCommittee(String committee) {
+        this.committee = committee;
+    }
 
 }

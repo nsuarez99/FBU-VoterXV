@@ -1,5 +1,7 @@
 package com.example.fbu_voterxv.models;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,23 +67,44 @@ public class MyOfficials {
         this.congressman = congressman;
     }
 
+    @Override
+    public String toString(){
+        String result;
+        try{
+            result = String.format("President: %s, VicePresdient: %s, SeniorSenator: %s, JuniorSenator: %s, Congressman: %s",
+                    president.name, vicePresident.name, seniorSenator.name, juniorSenator.name, congressman.name);
+        }
+        catch (NullPointerException e){
+            result = "Cannot return string as not all politicians are set";
+        }
+        return result;
+    }
+
     public static MyOfficials fromJsonObject(JSONObject jsonObject) throws JSONException {
         MyOfficials myOfficials = new MyOfficials();
         JSONArray officesArray = jsonObject.getJSONArray("officials");
         for (int i = 0; i < officesArray.length() ; i++) {
             JSONObject official = officesArray.getJSONObject(i);
 
-            Politician politician = new Politician();
+            Representative politician = new Representative();
 
             politician.setName(official.getString("name"));
             politician.setParty(official.getString("party"));
             politician.setWebsite(official.getJSONArray("urls").getString(0));
-            politician.setProfileImage(official.getString("photoUrl"));
+
+            //set photoURL if available
+            if (official.has("photoUrl")){
+                politician.setProfileImage(official.getString("photoUrl"));
+            }
+            else{
+                politician.setProfileImage("N/A");
+                Log.i(TAG, politician.name + " no photoUrl available");
+            }
 
             //set social media accounts if available
+            JSONArray channels = official.getJSONArray("channels");
             politician.setFb("N/A");
             politician.setTwitter("N/A");
-            JSONArray channels = official.getJSONArray("channels");
             for (int j = 0; j < channels.length() ; j++) {
                 JSONObject channel = channels.getJSONObject(j);
                 if (channel.getString("type").equals("Facebook")){
