@@ -23,6 +23,10 @@ public class SignupActivity extends AppCompatActivity {
     EditText signupPassword;
     EditText signupEmail;
     Button signupButton;
+    EditText signupStreet;
+    EditText signupState;
+    EditText signupCity;
+    EditText signupZipcode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,10 @@ public class SignupActivity extends AppCompatActivity {
         signupPassword = findViewById(R.id.signupPassword);
         signupButton = findViewById(R.id.loginButton);
         signupEmail = findViewById(R.id.signupEmail);
+        signupStreet = findViewById(R.id.signupStreet);
+        signupCity = findViewById(R.id.signupCity);
+        signupState = findViewById(R.id.signupState);
+        signupZipcode = findViewById(R.id.signupZipcode);
     }
 
     public void signupClick(View view) {
@@ -40,6 +48,10 @@ public class SignupActivity extends AppCompatActivity {
         String username = signupUsername.getText().toString();
         String password = signupPassword.getText().toString();
         String email = signupEmail.getText().toString();
+        String street = signupStreet.getText().toString();
+        String city = signupCity.getText().toString();
+        String state = signupState.getText().toString();
+        String zipcode = signupZipcode.getText().toString();
 
         // Create the ParseUser
         ParseUser user = new ParseUser();
@@ -47,6 +59,10 @@ public class SignupActivity extends AppCompatActivity {
         user.setUsername(username);
         user.setPassword(password);
         user.setEmail(email);
+        user.put("street", street);
+        user.put("city", city);
+        user.put("zipcode", zipcode);
+        user.put("state", state);
 
         // Invoke signUpInBackground
         user.signUpInBackground(new SignUpCallback() {

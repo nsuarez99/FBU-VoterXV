@@ -28,7 +28,7 @@
         android:textSize="22dp" />
 
     <EditText
-        android:id="@+id/signupParty"
+        android:id="@+id/profileParty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/party"
@@ -36,7 +36,6 @@
         android:layout_alignParentEnd="true"
         android:layout_marginStart="6dp"
         android:layout_toEndOf="@+id/party"
-        android:inputType="number"
         android:textSize="16dp"
         tools:text="Democrat" />
 
@@ -53,7 +52,7 @@
         android:textSize="22dp" />
 
     <EditText
-        android:id="@+id/signupAge"
+        android:id="@+id/profileAge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/age"
@@ -65,17 +64,16 @@
         tools:text="20" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/saveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="25dp"
-        android:onClick="saveProfile"
         android:text="Save" />
 
     <EditText
-        android:id="@+id/street"
+        android:id="@+id/profileStreet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/signupPic"
@@ -85,33 +83,33 @@
         android:hint="Street" />
 
     <EditText
-        android:id="@+id/city"
+        android:id="@+id/profileCity"
         android:layout_width="103dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/street"
-        android:layout_alignStart="@+id/street"
+        android:layout_below="@+id/profileStreet"
+        android:layout_alignStart="@+id/profileStreet"
         android:layout_marginStart="2dp"
         android:layout_marginTop="10dp"
         android:hint="City" />
 
     <EditText
-        android:id="@+id/state"
+        android:id="@+id/profileState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/street"
-        android:layout_toEndOf="@+id/city"
+        android:layout_below="@+id/profileStreet"
+        android:layout_toEndOf="@+id/profileCity"
         android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
         android:hint="State" />
 
     <EditText
-        android:id="@+id/zipcode"
+        android:id="@+id/profileZipcode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/street"
+        android:layout_below="@+id/profileStreet"
         android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@+id/state"
+        android:layout_toEndOf="@+id/profileState"
         android:hint="Zipcode" />
 
 

@@ -21,6 +21,7 @@ import com.example.fbu_voterxv.models.Election;
 import com.example.fbu_voterxv.models.MyOfficials;
 import com.example.fbu_voterxv.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
@@ -28,7 +29,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String TAG = "MainActivity";
+    public static final String TAG = "MainActivityTag";
     private Toolbar toolbar;
     private ImageView profileImage;
     private BottomNavigationView bottomNavigationView;
@@ -65,8 +66,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Create my user object with election and officials data
-        user = populateUser();
+        //Create my user object and populate with parseUser data
+        user = new User();
+        populateUser();
+
+        //checks to see if it comes from signup page to send them to the profile page
+        if(getIntent().getBooleanExtra("signup", false)){
+            Log.i(TAG, "new user");
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("user", Parcels.wrap(user));
+            Fragment fragment = profileFragment;
+            fragment.setArguments(bundle);
+            fragmentManager.beginTransaction().replace(R.id.frameLayoutContainer, profileFragment).commit();
+        }
 
         //set up bottom navigation
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -102,21 +114,27 @@ public class MainActivity extends AppCompatActivity {
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("user", Parcels.wrap(user));
                 Fragment fragment = profileFragment;
+                fragment.setArguments(bundle);
                 fragmentManager.beginTransaction().replace(R.id.frameLayoutContainer, fragment).commit();
-
             }
         });
 
-        //checks to see if it comes from signup page to send them to the profile page
-        if(getIntent().getBooleanExtra("signup", false)){
-            fragmentManager.beginTransaction().replace(R.id.frameLayoutContainer, profileFragment).commit();
-        }
     }
 
-    //TODO create method to query API and populate user object
-    private User populateUser() {
-        return new User();
+    //creates new user from parseUser data
+    public void populateUser() {
+        ParseUser parseUser = ParseUser.getCurrentUser();
+        user.setEmail(parseUser.getEmail());
+        user.setStreet(parseUser.getString("street"));
+        user.setCity(parseUser.getString("city"));
+        user.setState(parseUser.getString("state"));
+        user.setZipcode(parseUser.getString("zipcode"));
+        user.setParty(parseUser.getString("party"));
+        user.setAge(parseUser.getInt("age"));
+        user.setImage(parseUser.getParseFile("image"));
     }
 
     // Menu icons are inflated just as they were with actionbar

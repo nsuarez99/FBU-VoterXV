@@ -2,7 +2,9 @@ package com.example.fbu_voterxv;
 
 import android.app.Application;
 
+import com.example.fbu_voterxv.models.User;
 import com.parse.Parse;
+import com.parse.ParseObject;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
