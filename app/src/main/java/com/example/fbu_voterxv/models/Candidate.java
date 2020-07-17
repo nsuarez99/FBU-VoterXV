@@ -9,21 +9,28 @@ import java.util.List;
 public class Candidate extends Politician{
 
     public static final String TAG = "Candidate";
-    private String money_raised;
-
-    public Candidate(String name, int age, String profileImage, String party, String gender, String website, String fb, String twitter, String office, String money_raised) {
-        super(name, age, profileImage, party, gender, website, fb, twitter, office);
-        this.money_raised = money_raised;
-    }
+    private long money_raised;
+    private String slogan;
 
     public Candidate(){}
 
-    public String getMoney_raised() {
+    public long getMoney_raised() {
         return money_raised;
     }
 
+    public String getSlogan() {
+        return slogan;
+    }
 
-//        public static Candidate fromJson(JSONObject jsonObject){
+    public void setMoney_raised(long money_raised) {
+        this.money_raised = money_raised;
+    }
+
+    public void setSlogan(String slogan) {
+        this.slogan = slogan;
+    }
+
+    //        public static Candidate fromJson(JSONObject jsonObject){
 //        //TODO parse election data from JSON
 //    }
 

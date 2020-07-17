@@ -12,7 +12,6 @@ import com.example.fbu_voterxv.R;
 import com.example.fbu_voterxv.models.Candidate;
 import com.example.fbu_voterxv.models.Election;
 import com.example.fbu_voterxv.models.MyOfficials;
-import com.example.fbu_voterxv.models.Offices;
 import com.example.fbu_voterxv.models.Representative;
 import com.example.fbu_voterxv.models.User;
 
@@ -108,23 +107,23 @@ public class GoogleAPI {
 
                 //set politician as official
                 if (i == 0){
-                    politician.setOffice(Offices.PRESIDENT);
+                    politician.setOffice("President of the United States");
                     myOfficials.setPresident(politician);
                 }
                 else if (i == 1){
-                    politician.setOffice(Offices.VICE_PRESIDENT);
+                    politician.setOffice("Vice President of the United States");
                     myOfficials.setVicePresident(politician);
                 }
                 else if (i == 2){
-                    politician.setOffice(Offices.SENATE);
+                    politician.setOffice("Senior Senator");
                     myOfficials.setSeniorSenator(politician);
                 }
                 else if (i == 3){
-                    politician.setOffice(Offices.SENATE);
+                    politician.setOffice("Junior Senator");
                     myOfficials.setJuniorSenator(politician);
                 }
                 else if (i == 4){
-                    politician.setOffice(Offices.HOUSE_OF_REPRESENTATIVES);
+                    politician.setOffice("Congressman");
                     myOfficials.setCongressman(politician);
                 }
             }
@@ -136,9 +135,9 @@ public class GoogleAPI {
     public static class ElectionParse{
 
         //TODO check president tag
-        private static final String ELECTION_CONGRESSMAN = "REPRESENTATIVE IN CONGRESS";
-        private static final String ELECTION_SENATOR = "UNITED STATES SENATOR";
-        private static final String ELECTION_PRESIDENT = "UNTIED STATES PRESIDENT";
+        private static final String ELECTION_CONGRESSMAN = "Representative In Congress";
+        private static final String ELECTION_SENATOR = "United States Senator";
+        private static final String ELECTION_PRESIDENT = "United States President";
 
         //sets myOfficials and district
         public static void setElections(final User user) {
@@ -186,19 +185,19 @@ public class GoogleAPI {
                 election.setDate(election_day);
 
                 String office = electionsJSONObject.getString("office");
-                if (office.equals(ELECTION_CONGRESSMAN)){
-                    election.setName(election_name + " -\n" + Offices.HOUSE_OF_REPRESENTATIVES);
-                    parseCandidate(electionsJSONObject, election, Offices.HOUSE_OF_REPRESENTATIVES);
+                if (office.equals(ELECTION_CONGRESSMAN.toUpperCase())){
+                    election.setName(election_name + " -\n" + ELECTION_CONGRESSMAN);
+                    parseCandidate(electionsJSONObject, election, ELECTION_CONGRESSMAN);
                     electionsList.add(election);
                 }
-                else if (office.equals(ELECTION_SENATOR)){
-                    election.setName(election_name + " -\n" + Offices.SENATE);
-                    parseCandidate(electionsJSONObject, election, Offices.SENATE);
+                else if (office.equals(ELECTION_SENATOR.toUpperCase())){
+                    election.setName(election_name + " -\n" + ELECTION_SENATOR);
+                    parseCandidate(electionsJSONObject, election, ELECTION_SENATOR);
                     electionsList.add(election);
                 }
-                else if (office.equals(ELECTION_PRESIDENT)){
-                    election.setName(election_name + " -\n" + Offices.PRESIDENT);
-                    parseCandidate(electionsJSONObject, election, Offices.PRESIDENT);
+                else if (office.equals(ELECTION_PRESIDENT.toUpperCase())){
+                    election.setName(election_name + " -\n" + ELECTION_PRESIDENT);
+                    parseCandidate(electionsJSONObject, election, ELECTION_PRESIDENT);
                     electionsList.add(election);
                 }
             }
@@ -206,7 +205,7 @@ public class GoogleAPI {
         }
 
         //creates a single Election
-        private static void parseCandidate(JSONObject jsonObject, Election election, Offices office) throws JSONException {
+        private static void parseCandidate(JSONObject jsonObject, Election election, String office) throws JSONException {
             JSONArray candidatesJsonArray = jsonObject.getJSONArray("candidates");
             List<Candidate> candidates = new ArrayList<>();
             election.setCandidates(candidates);

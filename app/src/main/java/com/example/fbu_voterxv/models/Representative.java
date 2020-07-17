@@ -11,12 +11,6 @@ public class Representative extends Politician{
 
     public Representative(){}
 
-    public Representative(String name, int age, String profileImage, String party, String gender, String website, String fb, String twitter, String office, String committee, String years) {
-        super(name, age, profileImage, party, gender, website, fb, twitter, office);
-        this.committee = committee;
-        this.years = years;
-    }
-
     public String getCommittee() {
         return committee;
     }

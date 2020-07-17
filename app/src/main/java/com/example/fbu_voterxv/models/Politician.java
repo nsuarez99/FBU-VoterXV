@@ -15,9 +15,9 @@ public class Politician {
     String website;
     String fb;
     String twitter;
-    String office;
+    Offices office;
 
-    public Politician(String name, int age, String profileImage, String party, String gender, String website, String fb, String twitter, String office) {
+    public Politician(String name, int age, String profileImage, String party, String gender, String website, String fb, String twitter, Offices office) {
         this.name = name;
         this.age = age;
         this.profileImage = profileImage;
@@ -26,6 +26,7 @@ public class Politician {
         this.website = website;
         this.fb = fb;
         this.twitter = twitter;
+        this.office = office;
     }
 
     public Politician() {}
@@ -62,11 +63,11 @@ public class Politician {
         return twitter;
     }
 
-    public String getOffice() {
+    public Offices getOffice() {
         return office;
     }
 
-    public void setOffice(String office) {
+    public void setOffice(Offices office) {
         this.office = office;
     }
 

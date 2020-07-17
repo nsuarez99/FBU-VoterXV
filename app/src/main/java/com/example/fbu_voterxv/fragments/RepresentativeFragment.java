@@ -68,7 +68,7 @@ public class RepresentativeFragment extends Fragment {
         years.setText(representative.getYears());
         fb.setText(representative.getFb());
         twitter.setText(representative.getName());
-        office.setText(representative.getOffice());
+        office.setText(representative.getOffice().toString());
         website.setText(representative.getWebsite());
 
 
