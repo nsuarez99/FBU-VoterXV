@@ -46,6 +46,11 @@ public class Election {
         return dateFormat.format(date);
     }
 
+    public String getYear(){
+        String date = getDateString();
+        return date.substring(6);
+    }
+
     public void setName(String name) {
         this.name = name;
     }

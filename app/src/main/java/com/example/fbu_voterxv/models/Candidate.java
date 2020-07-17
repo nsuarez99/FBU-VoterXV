@@ -3,6 +3,7 @@ package com.example.fbu_voterxv.models;
 import org.json.JSONObject;
 import org.parceler.Parcel;
 
+import java.text.NumberFormat;
 import java.util.List;
 
 @Parcel
@@ -17,6 +18,11 @@ public class Candidate extends Politician{
 
     public long getMoney_raised() {
         return money_raised;
+    }
+
+    public String getMoney_raisedString() {
+        String simple = NumberFormat.getInstance().format(money_raised);
+        return "$" + money_raised;
     }
 
     public String getSlogan() {

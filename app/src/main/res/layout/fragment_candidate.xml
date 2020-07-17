@@ -11,58 +11,167 @@
         android:id="@+id/candidateName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:text="Barack Obama"
         android:textSize="32dp" />
 
     <ImageView
         android:id="@+id/candidateImage"
         android:layout_width="150dp"
-        android:layout_height="165dp"
+        android:layout_height="170dp"
+        android:layout_marginRight="4dp"
         android:layout_below="@id/candidateName"
         android:src="@drawable/officials" />
+
+    <TextView
+        android:id="@+id/office"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/candidateOffice"
+        android:layout_alignTop="@id/candidateOffice"
+        android:layout_toRightOf="@+id/candidateImage"
+        android:text="Office: "
+        android:textSize="16dp"/>
 
     <TextView
         android:id="@+id/candidateOffice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/candidateName"
+        android:layout_toRightOf="@+id/office"
+        android:layout_marginBottom="4dp"
+        android:text="President of the United States"
+        android:autoSizeTextType="uniform"
+        android:gravity="bottom"
+        android:autoSizeMaxTextSize="16dp"
+        android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/party"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/candidateParty"
+        android:layout_alignTop="@id/candidateParty"
         android:layout_toRightOf="@+id/candidateImage"
-        android:layout_marginStart="8dp"
-        android:text="Candidate Position: President of the United States"
+        android:text="Party: "
         android:textSize="16dp"/>
 
     <TextView
         android:id="@+id/candidateParty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/candidateOffice"
+        android:layout_below="@id/office"
+        android:layout_toRightOf="@+id/party"
+        android:layout_marginBottom="4dp"
+        android:text="Democrat"
+        android:autoSizeTextType="uniform"
+        android:gravity="bottom"
+        android:autoSizeMaxTextSize="16dp"
+        android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/slogan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/candidateSlogan"
+        android:layout_alignTop="@id/candidateSlogan"
         android:layout_toRightOf="@+id/candidateImage"
-        android:layout_marginStart="8dp"
-        android:text="Party: Democrat"
+        android:text="Slogan: "
         android:textSize="16dp"/>
 
     <TextView
-        android:id="@+id/candidateMoney"
+        android:id="@+id/candidateSlogan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/candidateParty"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_toRightOf="@+id/slogan"
+        android:layout_marginBottom="4dp"
+        android:text="John James for Senate Incorpated"
+        android:autoSizeTextType="uniform"
+        android:gravity="bottom"
+        android:autoSizeMaxTextSize="16dp"
+        android:autoSizeMinTextSize="6dp"
+        android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/moneyRaised"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/candidateMoneyRaised"
+        android:layout_alignTop="@+id/candidateMoneyRaised"
         android:layout_toRightOf="@+id/candidateImage"
-        android:text="Money Raised: $1,000,000"
-        android:textSize="16dp" />
+        android:text="Money Raised: "
+        android:textSize="16dp"/>
+
+    <TextView
+        android:id="@+id/candidateMoneyRaised"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/candidateSlogan"
+        android:layout_toRightOf="@+id/moneyRaised"
+        android:layout_marginBottom="4dp"
+        android:text="$1,000,000,000"
+        android:autoSizeTextType="uniform"
+        android:gravity="bottom"
+        android:autoSizeMaxTextSize="16dp"
+        android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/website"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/candidateWebsite"
+        android:layout_alignTop="@id/candidateWebsite"
+        android:layout_toRightOf="@+id/candidateImage"
+        android:text="Website: "
+        android:textSize="16dp"/>
+
+    <TextView
+        android:id="@+id/candidateWebsite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/candidateMoneyRaised"
+        android:layout_toRightOf="@+id/website"
+        android:layout_marginBottom="4dp"
+        android:text="http://whitehouse.barackobama.com"
+        android:gravity="bottom"
+        android:autoSizeMaxTextSize="16dp"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="6dp"
+        android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/fb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/candidateFb"
+        android:layout_alignTop="@id/candidateFb"
+        android:layout_toRightOf="@+id/candidateImage"
+        android:text="Facebook: "
+        android:textSize="16dp"/>
 
     <TextView
         android:id="@+id/candidateFb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/candidateMoney"
+        android:layout_below="@id/candidateWebsite"
+        android:layout_toRightOf="@+id/fb"
+        android:layout_marginBottom="4dp"
+        android:text="barackobama"
+        android:autoSizeTextType="uniform"
+        android:gravity="bottom"
+        android:autoSizeMaxTextSize="16dp"
+        android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/twitter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/candidateTwitter"
+        android:layout_alignTop="@id/candidateTwitter"
         android:layout_toRightOf="@+id/candidateImage"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:text="Facebook: barackobama"
-        android:textSize="16dp"/>
+        android:text="Twitter: "
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/candidateTwitter"
@@ -70,21 +179,19 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/candidateFb"
         android:layout_alignBottom="@+id/candidateImage"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="0dp"
-        android:layout_toRightOf="@+id/candidateImage"
-        android:text="Twitter: @barackobama"
-        android:textSize="16dp" />
+        android:layout_toRightOf="@+id/twitter"
+        android:text="barackobama"
+        android:autoSizeTextType="uniform"
+        android:maxLines="1" />
 
     <ImageView
         android:id="@+id/repPlaceholder"
-        android:layout_width="wrap_content"
-        android:layout_height="279dp"
+        android:layout_width="278dp"
+        android:layout_height="257dp"
         android:layout_below="@+id/candidateImage"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="42dp"
+        android:layout_marginTop="56dp"
         android:layout_marginBottom="97dp"
         android:src="@drawable/placeholder" />
 
