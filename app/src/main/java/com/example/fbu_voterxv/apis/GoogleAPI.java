@@ -181,17 +181,17 @@ public class GoogleAPI {
 
                 String office = electionsJSONObject.getString("office");
                 if (office.equals(ELECTION_CONGRESSMAN.toUpperCase())){
-                    election.setName(election_name + " - " + ELECTION_CONGRESSMAN);
+                    election.setName(election_name + " -\n" + ELECTION_CONGRESSMAN);
                     parseCandidate(electionsJSONObject, election);
                     electionsList.add(election);
                 }
                 else if (office.equals(ELECTION_SENATOR.toUpperCase())){
-                    election.setName(election_name + " - " + ELECTION_SENATOR);
+                    election.setName(election_name + " -\n" + ELECTION_SENATOR);
                     parseCandidate(electionsJSONObject, election);
                     electionsList.add(election);
                 }
                 else if (office.equals(ELECTION_PRESIDENT.toUpperCase())){
-                    election.setName(election_name + " - " + ELECTION_PRESIDENT);
+                    election.setName(election_name + " -\n" + ELECTION_PRESIDENT);
                     parseCandidate(electionsJSONObject, election);
                     electionsList.add(election);
                 }

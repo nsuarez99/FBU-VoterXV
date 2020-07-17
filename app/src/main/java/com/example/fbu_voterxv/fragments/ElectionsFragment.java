@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import java.util.List;
 
 public class ElectionsFragment extends Fragment {
 
+    public static final String TAG = "ElectionsFragment";
     private RecyclerView recyclerView;
     private List<Election> elections;
     private ElectionAdapter adapter;
@@ -69,16 +71,6 @@ public class ElectionsFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-
-
-        //TODO add endless scrolling
-//        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-//            @Override
-//            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-//                loadNextQueryPosts(elections.size());
-//            }
-//        };
-//        recyclerView.addOnScrollListener(scrollListener);
 
     }
 }
