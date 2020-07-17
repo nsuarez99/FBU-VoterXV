@@ -17,6 +17,7 @@ import com.example.fbu_voterxv.R;
 import com.example.fbu_voterxv.adapters.ElectionAdapter;
 import com.example.fbu_voterxv.models.Candidate;
 import com.example.fbu_voterxv.models.Election;
+import com.example.fbu_voterxv.models.User;
 
 import org.parceler.Parcels;
 
@@ -28,6 +29,7 @@ public class ElectionsFragment extends Fragment {
     private RecyclerView recyclerView;
     private List<Election> elections;
     private ElectionAdapter adapter;
+    private User user;
 
     public ElectionsFragment() {}
 
@@ -41,6 +43,8 @@ public class ElectionsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        user = Parcels.unwrap(getArguments().getParcelable("user"));
 
         recyclerView = view.findViewById(R.id.recyclerView);
 
@@ -60,18 +64,12 @@ public class ElectionsFragment extends Fragment {
         };
 
         //set adapter and recycler view
-        elections = new ArrayList<>();
+        elections = user.getElectionsList();
         adapter = new ElectionAdapter(getContext(), elections, onClickListener);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        //TODO get rid of test election
-        List<Candidate> candidates = new ArrayList<>();
-        candidates.add(new Candidate("Test name", 99, "https://i.pinimg.com/originals/80/8c/65/808c65ecb9ecce89e5b52cff5f45af5e.png", "Democrat", "gender", "website", "fb", "twitter", "money_raised"));
-        candidates.add(new Candidate("Test name 2", 99, "https://i.pinimg.com/originals/80/8c/65/808c65ecb9ecce89e5b52cff5f45af5e.png", "Democrat", "gender", "website", "fb", "twitter", "money_raised"));
-        elections.add(new Election("test election", "0/0/0000", candidates));
-        adapter.addAll(elections);
 
         //TODO add endless scrolling
 //        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {

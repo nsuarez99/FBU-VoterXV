@@ -12,6 +12,7 @@ import com.example.fbu_voterxv.R;
 import com.example.fbu_voterxv.models.Candidate;
 import com.example.fbu_voterxv.models.Election;
 import com.example.fbu_voterxv.models.MyOfficials;
+import com.example.fbu_voterxv.models.Representative;
 import com.example.fbu_voterxv.models.User;
 
 import org.json.JSONArray;
@@ -34,43 +35,101 @@ public class GoogleAPI {
     public static final String TAG = "GoogleAPI";
     private static final String BASE_URL = "https://www.googleapis.com/civicinfo/v2/";
     private static final String KEY = BuildConfig.GOOGLE_KEY;
-    //TODO check president tag
 
-    //sets myOfficials and district
-    public static void setMyOfficials(final User user) {
-        final String URL = BASE_URL + "representatives";
-        AsyncHttpClient client = new AsyncHttpClient();
+    public static class OfficialsParse{
 
-        //TODO figure out if can split this into parameter without roles overrideing
-        String complete = URL + "?address=" + user.getAddress() + "&levels=country&roles=legislatorLowerBody&roles=legislatorUpperBody&roles=headOfGovernment&roles=deputyHeadOfGovernment&key=" + KEY;
+        //sets myOfficials and district
+        public static void setMyOfficials(final User user) {
+            final String URL = BASE_URL + "representatives";
+            AsyncHttpClient client = new AsyncHttpClient();
 
-        client.get(complete, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Log.d(TAG, "onSuccess setMyOfficials");
-                JSONObject jsonObject = json.jsonObject;
-                try{
-                    user.setDistrict(jsonObject);
-                    user.setOfficials(MyOfficials.fromJsonObject(jsonObject));
-                    Log.i(TAG, user.getOfficials().toString());
+            //TODO figure out if can split this into parameter without roles overrideing
+            String complete = URL + "?address=" + user.getAddress() + "&levels=country&roles=legislatorLowerBody&roles=legislatorUpperBody&roles=headOfGovernment&roles=deputyHeadOfGovernment&key=" + KEY;
+
+            client.get(complete, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Headers headers, JSON json) {
+                    Log.d(TAG, "onSuccess setMyOfficials");
+                    JSONObject jsonObject = json.jsonObject;
+                    try{
+                        user.setDistrict(jsonObject);
+                        user.setOfficials(parseMyOfficials(jsonObject));
+                        Log.i(TAG, user.getOfficials().toString());
+                    }
+                    catch (JSONException e){
+                        Log.e(TAG, "Hit json exception while parcing, error: " + e);
+                        e.printStackTrace();
+                    }
                 }
-                catch (JSONException e){
-                    Log.e(TAG, "Hit json exception while parcing, error: " + e);
-                    e.printStackTrace();
+
+                @Override
+                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                    Log.d(TAG, String.format("onFailure Officials: \nstatusCode:%d \nresponse:%s", statusCode, response));
+                }
+            });
+        }
+
+        //parse MyOfficials fromJson Object
+        public static MyOfficials parseMyOfficials(JSONObject jsonObject) throws JSONException {
+            MyOfficials myOfficials = new MyOfficials();
+            JSONArray officesArray = jsonObject.getJSONArray("officials");
+            for (int i = 0; i < officesArray.length() ; i++) {
+                JSONObject official = officesArray.getJSONObject(i);
+
+                Representative politician = new Representative();
+
+                politician.setName(official.getString("name"));
+                politician.setParty(official.getString("party"));
+                politician.setWebsite(official.getJSONArray("urls").getString(0));
+
+                //set photoURL if available
+                if (official.has("photoUrl")){
+                    politician.setProfileImage(official.getString("photoUrl"));
+                }
+                else{
+                    politician.setProfileImage("N/A");
+                    Log.i(TAG, politician.getName() + " no photoUrl available");
+                }
+
+                //set social media accounts if available
+                JSONArray channels = official.getJSONArray("channels");
+                politician.setFb("N/A");
+                politician.setTwitter("N/A");
+                for (int j = 0; j < channels.length() ; j++) {
+                    JSONObject channel = channels.getJSONObject(j);
+                    if (channel.getString("type").equals("Facebook")){
+                        politician.setFb(channel.getString("id"));
+                    }
+                    else if (channel.getString("type").equals("Twitter")){
+                        politician.setTwitter(channel.getString("id"));
+                    }
+                }
+
+                //set politician as official
+                if (i == 0){
+                    myOfficials.setPresident(politician);
+                }
+                else if (i == 1){
+                    myOfficials.setVicePresident(politician);
+                }
+                else if (i == 2){
+                    myOfficials.setSeniorSenator(politician);
+                }
+                else if (i == 3){
+                    myOfficials.setJuniorSenator(politician);
+                }
+                else if (i == 4){
+                    myOfficials.setCongressman(politician);
                 }
             }
-
-            @Override
-            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                Log.d(TAG, String.format("onFailure Officials: \nstatusCode:%d \nresponse:%s", statusCode, response));
-            }
-        });
+            return myOfficials;
+        }
     }
-
 
 
     public static class ElectionParse{
 
+        //TODO check president tag
         private static final String ELECTION_CONGRESSMAN = "Representative In Congress";
         private static final String ELECTION_SENATOR = "United States Senator";
         private static final String ELECTION_PRESIDENT = "United States President";
