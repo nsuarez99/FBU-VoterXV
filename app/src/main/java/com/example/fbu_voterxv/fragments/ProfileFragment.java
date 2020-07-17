@@ -69,8 +69,6 @@ public class ProfileFragment extends Fragment {
                 }
                 else{
                     saveChanges();
-                    Toast.makeText(getContext(), "Saved profile", Toast.LENGTH_SHORT).show();
-                    populateFields();
                 }
             }
         });
@@ -95,15 +93,23 @@ public class ProfileFragment extends Fragment {
         parseUser.put("city", city);
         parseUser.put("state", state);
         parseUser.put("zipcode", zipcode);
-        parseUser.saveInBackground();
+        parseUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                ((MainActivity) getActivity()).populateUser();
+                Toast.makeText(getContext(), "Saved profile", Toast.LENGTH_SHORT).show();
+                populateFields();
+            }
+        });
 
         //update user
-        user.setAge(age);
-        user.setParty(party);
-        user.setStreet(street);
-        user.setCity(city);
-        user.setState(state);
-        user.setZipcode(zipcode);
+//        user.setAge(age);
+//        user.setParty(party);
+//        user.setStreet(street);
+//        user.setCity(city);
+//        user.setState(state);
+//        user.setZipcode(zipcode);
+
 
     }
 

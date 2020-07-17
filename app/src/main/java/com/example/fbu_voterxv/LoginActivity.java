@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //when login button is clicked attempts to login the user and if valid user goes to MainAcitivity
     public void loginClick(View view){
-        Log.i(TAG, "login button clicked, attemtping to login");
+        Log.i(TAG, "login button clicked, attempting to login");
         String username = loginUsername.getText().toString();
         String password = loginPassword.getText().toString();
         ParseUser.logInInBackground(username, password, new LogInCallback() {
