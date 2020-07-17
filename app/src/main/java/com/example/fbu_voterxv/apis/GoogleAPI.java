@@ -107,18 +107,23 @@ public class GoogleAPI {
 
                 //set politician as official
                 if (i == 0){
+                    politician.setOffice("President of the United States");
                     myOfficials.setPresident(politician);
                 }
                 else if (i == 1){
+                    politician.setOffice("Vice President of the United States");
                     myOfficials.setVicePresident(politician);
                 }
                 else if (i == 2){
+                    politician.setOffice("Senior Senator");
                     myOfficials.setSeniorSenator(politician);
                 }
                 else if (i == 3){
+                    politician.setOffice("Junior Senator");
                     myOfficials.setJuniorSenator(politician);
                 }
                 else if (i == 4){
+                    politician.setOffice("Congressman");
                     myOfficials.setCongressman(politician);
                 }
             }

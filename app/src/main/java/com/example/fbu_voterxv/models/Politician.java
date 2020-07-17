@@ -15,8 +15,9 @@ public class Politician {
     String website;
     String fb;
     String twitter;
+    String office;
 
-    public Politician(String name, int age, String profileImage, String party, String gender, String website, String fb, String twitter) {
+    public Politician(String name, int age, String profileImage, String party, String gender, String website, String fb, String twitter, String office) {
         this.name = name;
         this.age = age;
         this.profileImage = profileImage;
@@ -59,6 +60,14 @@ public class Politician {
 
     public String getTwitter() {
         return twitter;
+    }
+
+    public String getOffice() {
+        return office;
+    }
+
+    public void setOffice(String office) {
+        this.office = office;
     }
 
     public void setName(String name) {

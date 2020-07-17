@@ -11,35 +11,72 @@
         android:id="@+id/representativeName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:text="Barack Obama"
         android:textSize="32dp" />
 
     <ImageView
         android:id="@+id/representativeImage"
         android:layout_width="150dp"
-        android:layout_height="165dp"
+        android:layout_height="170dp"
+        android:layout_marginRight="4dp"
         android:layout_below="@id/representativeName"
         android:src="@drawable/officials" />
+
+    <TextView
+        android:id="@+id/office"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/representativeOffice"
+        android:layout_alignTop="@id/representativeOffice"
+        android:layout_toRightOf="@+id/representativeImage"
+        android:text="Office: "
+        android:textSize="16dp"/>
 
     <TextView
         android:id="@+id/representativeOffice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/representativeName"
+        android:layout_toRightOf="@+id/office"
+        android:layout_marginBottom="4dp"
+        android:text="President of the United States"
+        android:autoSizeTextType="uniform"
+        android:gravity="bottom"
+        android:autoSizeMaxTextSize="16dp"
+        android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/party"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/representativeParty"
+        android:layout_alignTop="@id/representativeParty"
         android:layout_toRightOf="@+id/representativeImage"
-        android:layout_marginStart="8dp"
-        android:text="Title: President of the United States"
+        android:text="Party: "
         android:textSize="16dp"/>
 
     <TextView
         android:id="@+id/representativeParty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/representativeOffice"
+        android:layout_below="@id/office"
+        android:layout_toRightOf="@+id/party"
+        android:layout_marginBottom="4dp"
+        android:text="Democrat"
+        android:autoSizeTextType="uniform"
+        android:gravity="bottom"
+        android:autoSizeMaxTextSize="16dp"
+        android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/years"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/representativeYears"
+        android:layout_alignTop="@id/representativeYears"
         android:layout_toRightOf="@+id/representativeImage"
-        android:layout_marginStart="8dp"
-        android:text="Party: Democrat"
+        android:text="Years in Office: "
         android:textSize="16dp"/>
 
     <TextView
@@ -47,10 +84,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/representativeParty"
+        android:layout_toRightOf="@+id/years"
+        android:layout_marginBottom="4dp"
+        android:text="2011-2012"
+        android:autoSizeTextType="uniform"
+        android:gravity="bottom"
+        android:autoSizeMaxTextSize="16dp"
+        android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/committee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/representativeCommittee"
+        android:layout_alignTop="@+id/representativeCommittee"
         android:layout_toRightOf="@+id/representativeImage"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:text="Years in Office: 2011-2012"
+        android:text="Committee: "
         android:textSize="16dp"/>
 
     <TextView
@@ -58,22 +107,70 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/representativeYears"
+        android:layout_toRightOf="@+id/committee"
+        android:layout_marginBottom="4dp"
+        android:text="Ways and Means"
+        android:autoSizeTextType="uniform"
+        android:gravity="bottom"
+        android:autoSizeMaxTextSize="16dp"
+        android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/website"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/representativeWebsite"
+        android:layout_alignTop="@id/representativeWebsite"
         android:layout_toRightOf="@+id/representativeImage"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:text="Committee: Ways and Means"
+        android:text="Website: "
+        android:textSize="16dp"/>
+
+    <TextView
+        android:id="@+id/representativeWebsite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/representativeCommittee"
+        android:layout_toRightOf="@+id/website"
+        android:layout_marginBottom="4dp"
+        android:text="http://whitehouse.barackobama.com"
+        android:gravity="bottom"
+        android:autoSizeMaxTextSize="16dp"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="6dp"
+        android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/fb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/representativeFb"
+        android:layout_alignTop="@id/representativeFb"
+        android:layout_toRightOf="@+id/representativeImage"
+        android:text="Facebook: "
         android:textSize="16dp"/>
 
     <TextView
         android:id="@+id/representativeFb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/representativeCommittee"
+        android:layout_below="@id/representativeWebsite"
+        android:layout_toRightOf="@+id/fb"
+        android:layout_marginBottom="4dp"
+        android:text="barackobama"
+        android:autoSizeTextType="uniform"
+        android:gravity="bottom"
+        android:autoSizeMaxTextSize="16dp"
+        android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/twitter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/representativeTwitter"
+        android:layout_alignTop="@id/representativeTwitter"
         android:layout_toRightOf="@+id/representativeImage"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:text="Facebook: barackobama"
-        android:textSize="16dp"/>
+        android:text="Twitter: "
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/representativeTwitter"
@@ -81,21 +178,19 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/representativeFb"
         android:layout_alignBottom="@+id/representativeImage"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="0dp"
-        android:layout_toRightOf="@+id/representativeImage"
-        android:text="Twitter: @barackobama"
-        android:textSize="16dp" />
+        android:layout_toRightOf="@+id/twitter"
+        android:text="@barackobama"
+        android:autoSizeTextType="uniform"
+        android:maxLines="1" />
 
     <ImageView
         android:id="@+id/repPlaceholder"
-        android:layout_width="wrap_content"
-        android:layout_height="279dp"
+        android:layout_width="278dp"
+        android:layout_height="257dp"
         android:layout_below="@+id/representativeImage"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="42dp"
+        android:layout_marginTop="56dp"
         android:layout_marginBottom="97dp"
         android:src="@drawable/placeholder" />
 

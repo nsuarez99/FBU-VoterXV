@@ -121,7 +121,6 @@ public class OfficialsFragment extends Fragment {
         setListeners();
     }
 
-    //TODO get rid of test represenative once populating data
     //set click listeners to send to fragment with correct data
     private void setListeners() {
         final Representative test = new Representative();
@@ -129,46 +128,41 @@ public class OfficialsFragment extends Fragment {
         presidentImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToFragment(test);
-//                goToFragment(myOfficials.getPresident());
+                goToFragment(myOfficials.getPresident());
             }
         });
 
         vicePresidentImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToFragment(test);
-//                goToFragment(myOfficials.getVicePresident());
+                goToFragment(myOfficials.getVicePresident());
             }
         });
 
         senatorSrImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToFragment(test);
-//                goToFragment(myOfficials.getSeniorSenator());
+                goToFragment(myOfficials.getSeniorSenator());
             }
         });
 
         senatorJrImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToFragment(test);
-//                goToFragment(myOfficials.getJuniorSenator());
+                goToFragment(myOfficials.getJuniorSenator());
             }
         });
 
         congressmanImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToFragment(test);
-//                goToFragment(myOfficials.getCongressman());
+                goToFragment(myOfficials.getCongressman());
             }
         });
     }
 
     //set fragment data and send to represenative fragment
-    private void goToFragment(Representative representative){
+    private void goToFragment(Politician representative){
         Bundle bundle = new Bundle();
         bundle.putParcelable("representative", Parcels.wrap(representative));
         fragment.setArguments(bundle);

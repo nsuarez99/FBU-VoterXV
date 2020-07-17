@@ -11,8 +11,8 @@ public class Candidate extends Politician{
     public static final String TAG = "Candidate";
     private String money_raised;
 
-    public Candidate(String name, int age, String profileImage, String party, String gender, String website, String fb, String twitter, String money_raised) {
-        super(name, age, profileImage, party, gender, website, fb, twitter);
+    public Candidate(String name, int age, String profileImage, String party, String gender, String website, String fb, String twitter, String office, String money_raised) {
+        super(name, age, profileImage, party, gender, website, fb, twitter, office);
         this.money_raised = money_raised;
     }
 
