@@ -142,9 +142,6 @@ public class MainActivity extends AppCompatActivity {
         GoogleAPI.OfficialsParse.setMyOfficials(user);
         GoogleAPI.ElectionParse.setElections(user);
 
-
-        FecAPI.CandidateParse.setCandidates(user.getElectionsList());
-
     }
 
     // Menu icons are inflated just as they were with actionbar

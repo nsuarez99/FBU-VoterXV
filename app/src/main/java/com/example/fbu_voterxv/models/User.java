@@ -30,21 +30,6 @@ public class User {
 
     public User(){}
 
-    public User(int age, String username, String email, String party, ParseFile image, String street, String city, String zipcode, String state, String district, MyOfficials officials, List<Election> electionsList) {
-        this.age = age;
-        this.username = username;
-        this.email = email;
-        this.party = party;
-        this.image = image;
-        this.street = street;
-        this.city = city;
-        this.zipcode = zipcode;
-        this.state = state;
-        this.district = district;
-        this.officials = officials;
-        this.electionsList = electionsList;
-    }
-
     public String getCity() {
         return city;
     }
@@ -156,10 +141,5 @@ public class User {
     public void setElectionsList(List<Election> electionsList) {
         this.electionsList = electionsList;
     }
-
-
-    //    public static Candidate fromJson(JSONObject jsonObject){
-//        //TODO parse election data from JSON
-//    }
 
 }

@@ -150,6 +150,7 @@ public class GoogleAPI {
             params.put("officialOnly", false);
             final Boolean finish = false;
 
+
             client.get(URL, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Headers headers, JSON json) {
@@ -157,6 +158,7 @@ public class GoogleAPI {
                     JSONObject jsonObject = json.jsonObject;
                     try{
                         user.setElectionsList(parseElectionList(jsonObject));
+                        FecAPI.CandidateParse.setCandidates(user.getElectionsList());
                     }
                     catch (JSONException e){
                         Log.e(TAG, "Hit json exception while parcing, error: " + e);
