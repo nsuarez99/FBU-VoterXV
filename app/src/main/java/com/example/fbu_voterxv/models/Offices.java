@@ -30,5 +30,5 @@ public enum Offices {
         public String toString() {
             return "Vice President of the United States";
         }
-    }
+    };
 }

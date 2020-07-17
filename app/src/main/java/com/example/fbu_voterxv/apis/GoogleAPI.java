@@ -148,6 +148,7 @@ public class GoogleAPI {
             params.put("key", KEY);
             params.put("address", user.getAddress());
             params.put("officialOnly", false);
+            final Boolean finish = false;
 
             client.get(URL, params, new JsonHttpResponseHandler() {
                 @Override

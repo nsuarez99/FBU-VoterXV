@@ -11,6 +11,7 @@ public class Candidate extends Politician{
     public static final String TAG = "Candidate";
     private long money_raised;
     private String slogan;
+    private String incumbentStatus;
 
     public Candidate(){}
 
@@ -20,6 +21,14 @@ public class Candidate extends Politician{
 
     public String getSlogan() {
         return slogan;
+    }
+
+    public String getIncumbentStatus() {
+        return incumbentStatus;
+    }
+
+    public void setIncumbentStatus(String incumbentStatus) {
+        this.incumbentStatus = incumbentStatus;
     }
 
     public void setMoney_raised(long money_raised) {

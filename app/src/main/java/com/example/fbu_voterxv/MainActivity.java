@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.fbu_voterxv.apis.FecAPI;
 import com.example.fbu_voterxv.apis.GoogleAPI;
 import com.example.fbu_voterxv.fragments.ElectionsFragment;
 import com.example.fbu_voterxv.fragments.OfficialsFragment;
@@ -140,6 +141,9 @@ public class MainActivity extends AppCompatActivity {
 
         GoogleAPI.OfficialsParse.setMyOfficials(user);
         GoogleAPI.ElectionParse.setElections(user);
+
+
+        FecAPI.CandidateParse.setCandidates(user.getElectionsList());
 
     }
 
