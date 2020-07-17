@@ -23,7 +23,7 @@ public class Candidate extends Politician{
     }
 
 
-    //    public static Candidate fromJson(JSONObject jsonObject){
+//        public static Candidate fromJson(JSONObject jsonObject){
 //        //TODO parse election data from JSON
 //    }
 

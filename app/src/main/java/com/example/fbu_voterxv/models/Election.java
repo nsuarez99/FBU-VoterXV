@@ -1,23 +1,30 @@
 package com.example.fbu_voterxv.models;
 
+import android.util.Log;
+
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Parcel
 public class Election {
 
     public static final String TAG = "Election";
-    private String title;
-    private String date;
+    private String name;
+    private Date date;
     private List<Candidate> candidates;
 
     public Election(){}
 
-    public Election(String title, String date, List<Candidate> candidates) {
-        this.title = title;
+    public Election(String name, Date date, List<Candidate> candidates) {
+        this.name = name;
         this.date = date;
         this.candidates = candidates;
     }
@@ -26,19 +33,33 @@ public class Election {
         return candidates;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-//    public static Election fromJson(JSONObject jsonObject){
-//        //TODO parse election data from JSON
-//    }
+    public String getDateString(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        return dateFormat.format(date);
+    }
 
-//    public static List<Election> fromJsonArray(JSONArray jsonArray){
-//        //TODO parse elections data into election array
-//    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setCandidates(List<Candidate> candidates) {
+        this.candidates = candidates;
+    }
+
+    @Override
+    public String toString(){
+        return name;
+    }
 }

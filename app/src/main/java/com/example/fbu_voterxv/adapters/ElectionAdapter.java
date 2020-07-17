@@ -75,7 +75,7 @@ public class ElectionAdapter extends RecyclerView.Adapter<ElectionAdapter.ViewHo
         }
 
         public void bind(Election election) {
-            electionButton.setText(election.getTitle());
+            electionButton.setText(election.getName());
             electionDate.setText(election.getDate());
             setListeners();
         }

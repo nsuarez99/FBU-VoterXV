@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
         user.setImage(parseUser.getParseFile("image"));
 
         GoogleAPI.setMyOfficials(user);
+        GoogleAPI.ElectionParse.setElections(user);
 
     }
 
