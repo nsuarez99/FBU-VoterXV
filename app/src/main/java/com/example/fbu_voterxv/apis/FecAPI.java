@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -45,25 +46,30 @@ public class FecAPI {
 
     public static class CandidateParse{
 
-        public static void setCandidates(final List<Election> elections){
+        public static void setCandidates(final User user){
+            List<Election> elections = user.getElectionsList();
+            String state = user.getState();
             for (Election election : elections){
                 List<Candidate> candidates = election.getCandidates();
-                setCandidatesBasic(candidates);
-                setCandidatesMoney(candidates);
+                setCandidatesBasic(candidates, state);
+                setCandidatesMoney(candidates, state, election.getYear());
             }
         }
 
+        //TODO do different parse if president
         //sets candidates money raised
-        public static void setCandidatesMoney(final List<Candidate> candidates) {
+        public static void setCandidatesMoney(final List<Candidate> candidates, String state, String year) {
             final String URL = BASE_URL + "candidates/totals/";
             for (final Candidate candidate : candidates){
                 AsyncHttpClient client = new AsyncHttpClient();
                 RequestParams params = new RequestParams();
                 params.put("api_key", KEY);
-                params.put("name", candidate.getName());
-                params.put("party", candidate.getParty().substring(3));
+                params.put("q", candidate.getName());
+                params.put("party", candidate.getParty().substring(0,3));
                 params.put("office", getFecOfficeString(candidate.getOffice()));
+                params.put("state", state);
                 params.put("is_active_candidate", true);
+                params.put("cycle", year);
 
                 client.get(URL, params, new JsonHttpResponseHandler() {
                     @Override
@@ -89,7 +95,14 @@ public class FecAPI {
 
         //fills out incumbent status and slogan of candidate
         private static void parseCandidateMoney(JSONArray jsonArray, Candidate candidate) throws JSONException {
-            if (jsonArray.length() > 1) {Log.e(TAG, "more than 1 result for candidate");}
+            if (jsonArray.length() > 1) {
+                Log.e(TAG, "more than 1 result for candidate: "  + candidate.getName() + ", " + jsonArray);
+                return;
+            }
+            else if (jsonArray.length() == 0){
+                Log.e(TAG, "0 result for candidate: " + candidate.getName() + ", " + jsonArray);
+                return;
+            }
 
             JSONObject jsonObject = jsonArray.getJSONObject(0);
             long cash = jsonObject.getLong("cash_on_hand_end_period");
@@ -99,15 +112,16 @@ public class FecAPI {
 
 
         //sets candidates slogan and imbumbent status
-        public static void setCandidatesBasic(final List<Candidate> candidates) {
+        public static void setCandidatesBasic(final List<Candidate> candidates, String state) {
             final String URL = BASE_URL + "candidates/search/";
             for (final Candidate candidate : candidates){
                 AsyncHttpClient client = new AsyncHttpClient();
                 RequestParams params = new RequestParams();
                 params.put("api_key", KEY);
                 params.put("name", candidate.getName());
-                params.put("party", candidate.getParty().substring(3));
+                params.put("party", candidate.getParty().substring(0,3));
                 params.put("office", getFecOfficeString(candidate.getOffice()));
+                params.put("state", state);
                 params.put("is_active_candidate", true);
 
                 client.get(URL, params, new JsonHttpResponseHandler() {
@@ -134,11 +148,19 @@ public class FecAPI {
 
         //fills out incumbent status and slogan of candidate
         private static void parseCandidateBasic(JSONArray jsonArray, Candidate candidate) throws JSONException {
-            if (jsonArray.length() > 1) {Log.e(TAG, "more than 1 result for candidate");}
+            if (jsonArray.length() > 1) {
+                Log.e(TAG, "more than 1 result for candidate");
+                return;
+            }
+            else if (jsonArray.length() == 0){
+                Log.e(TAG, "0 result for candidate: " + candidate.getName() + ", " + jsonArray);
+                return;
+            }
 
             JSONObject jsonObject = jsonArray.getJSONObject(0);
             candidate.setIncumbentStatus(jsonObject.getString("incumbent_challenge_full"));
-            candidate.setSlogan(jsonObject.getJSONArray("principal_committees").getJSONObject(0).getString("name"));
+            String slogan = jsonObject.getJSONArray("principal_committees").getJSONObject(0).getString("name");
+            candidate.setSlogan(GoogleAPI.capitalizeWord(slogan.toLowerCase()));
         }
 
     }

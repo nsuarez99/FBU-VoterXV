@@ -37,6 +37,17 @@ public class GoogleAPI {
     private static final String BASE_URL = "https://www.googleapis.com/civicinfo/v2/";
     private static final String KEY = BuildConfig.GOOGLE_KEY;
 
+    public static String capitalizeWord(String str){
+        String words[] = str.split("\\s");
+        String capitalizeWord = "";
+        for(String word : words){
+            String first = word.substring(0,1);
+            String rest = word.substring(1);
+            capitalizeWord += first.toUpperCase() + rest + " ";
+        }
+        return capitalizeWord.trim();
+    }
+
     public static class OfficialsParse{
 
         //sets myOfficials and district
@@ -158,7 +169,7 @@ public class GoogleAPI {
                     JSONObject jsonObject = json.jsonObject;
                     try{
                         user.setElectionsList(parseElectionList(jsonObject));
-                        FecAPI.CandidateParse.setCandidates(user.getElectionsList());
+                        FecAPI.CandidateParse.setCandidates(user);
                     }
                     catch (JSONException e){
                         Log.e(TAG, "Hit json exception while parcing, error: " + e);
@@ -220,20 +231,9 @@ public class GoogleAPI {
                 Candidate candidate = new Candidate();
                 candidate.setOffice(office);
                 candidate.setName(candidatesJsonObject.getString("name"));
-                candidate.setParty(capitalizeWord(candidatesJsonObject.getString("party")));
+                candidate.setParty(capitalizeWord(candidatesJsonObject.getString("party").toLowerCase()));
                 candidates.add(candidate);
             }
-        }
-
-        public static String capitalizeWord(String str){
-            String words[] = str.split("\\s");
-            String capitalizeWord = "";
-            for(String word : words){
-                String first = word.substring(0,1);
-                String rest = word.substring(1);
-                capitalizeWord += first.toUpperCase() + rest + " ";
-            }
-            return capitalizeWord.trim();
         }
 
         public static Date parseElectionTime(String rawJsonTime){

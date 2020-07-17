@@ -5,6 +5,7 @@ import org.parceler.Parcel;
 
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 @Parcel
 public class Candidate extends Politician{
@@ -21,8 +22,8 @@ public class Candidate extends Politician{
     }
 
     public String getMoney_raisedString() {
-        String simple = NumberFormat.getInstance().format(money_raised);
-        return "$" + money_raised;
+        String simple = NumberFormat.getInstance(Locale.US).format(money_raised);
+        return "$" + simple;
     }
 
     public String getSlogan() {
