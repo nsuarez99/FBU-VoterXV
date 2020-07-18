@@ -159,8 +159,6 @@ public class GoogleAPI {
             params.put("key", KEY);
             params.put("address", user.getAddress());
             params.put("officialOnly", false);
-            final Boolean finish = false;
-
 
             client.get(URL, params, new JsonHttpResponseHandler() {
                 @Override
@@ -179,6 +177,7 @@ public class GoogleAPI {
 
                 @Override
                 public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                    user.setElectionsList(new ArrayList<Election>());
                     Log.d(TAG, String.format("onFailure Elections: \nstatusCode:%d \nresponse:%s", statusCode, response));
                 }
             });
