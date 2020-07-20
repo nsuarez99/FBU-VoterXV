@@ -1,69 +1,57 @@
 package com.example.fbu_voterxv.models;
 
-import android.util.Log;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.parceler.Parcel;
 
 @Parcel
 public class MyOfficials {
 
     public static final String TAG = "MyOfficials";
-    public Politician president;
-    public Politician vicePresident;
-    public Politician seniorSenator;
-    public Politician juniorSenator;
-    public Politician congressman;
+    public Representative president;
+    public Representative vicePresident;
+    public Representative seniorSenator;
+    public Representative juniorSenator;
+    public Representative congressman;
 
     public MyOfficials(){}
 
-    public MyOfficials(Politician president, Politician vicePresident, Politician seniorSenator, Politician juniorSenator, Politician congressman) {
-        this.president = president;
-        this.vicePresident = vicePresident;
-        this.seniorSenator = seniorSenator;
-        this.juniorSenator = juniorSenator;
-        this.congressman = congressman;
-    }
 
-    public Politician getPresident() {
+    public Representative getPresident() {
         return president;
     }
 
-    public Politician getVicePresident() {
+    public Representative getVicePresident() {
         return vicePresident;
     }
 
-    public Politician getSeniorSenator() {
+    public Representative getSeniorSenator() {
         return seniorSenator;
     }
 
-    public Politician getJuniorSenator() {
+    public Representative getJuniorSenator() {
         return juniorSenator;
     }
 
-    public Politician getCongressman() {
+    public Representative getCongressman() {
         return congressman;
     }
 
-    public void setPresident(Politician president) {
+    public void setPresident(Representative president) {
         this.president = president;
     }
 
-    public void setVicePresident(Politician vicePresident) {
+    public void setVicePresident(Representative vicePresident) {
         this.vicePresident = vicePresident;
     }
 
-    public void setSeniorSenator(Politician seniorSenator) {
+    public void setSeniorSenator(Representative seniorSenator) {
         this.seniorSenator = seniorSenator;
     }
 
-    public void setJuniorSenator(Politician juniorSenator) {
+    public void setJuniorSenator(Representative juniorSenator) {
         this.juniorSenator = juniorSenator;
     }
 
-    public void setCongressman(Politician congressman) {
+    public void setCongressman(Representative congressman) {
         this.congressman = congressman;
     }
 

@@ -122,18 +122,6 @@ public class User {
         this.email = email;
     }
 
-    public void setDistrict(JSONObject jsonObject) throws JSONException {
-        JSONArray officesArray = jsonObject.getJSONArray("offices");
-        for (int i = 0; i < officesArray.length(); i++){
-            JSONObject office = officesArray.getJSONObject(i);
-            if (office.getString("name").equals("U.S. Representative")){
-                int index = office.getString("divisionId").indexOf("cd:");
-                district = office.getString("divisionId").substring(index + 3);
-                return;
-            }
-        }
-    }
-
     public void setOfficials(MyOfficials officials) {
         this.officials = officials;
     }

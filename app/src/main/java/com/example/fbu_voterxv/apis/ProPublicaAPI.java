@@ -1,11 +1,14 @@
 package com.example.fbu_voterxv.apis;
 
+import android.graphics.Movie;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.fbu_voterxv.BuildConfig;
+import com.example.fbu_voterxv.R;
 import com.example.fbu_voterxv.models.Candidate;
 import com.example.fbu_voterxv.models.Election;
 import com.example.fbu_voterxv.models.MyOfficials;
@@ -21,7 +24,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import okhttp3.Headers;
 
@@ -58,10 +64,9 @@ public class GoogleAPI {
                     Log.d(TAG, "onSuccess setMyOfficials");
                     JSONObject jsonObject = json.jsonObject;
                     try{
-                        user.setDistrict(parseDistrict(jsonObject, user));
+                        user.setDistrict(jsonObject);
                         user.setOfficials(parseMyOfficials(jsonObject));
                         Log.i(TAG, user.getOfficials().toString());
-                        ProPublicaAPI.OfficialsYearsCommitteeParse.setRepYearsCommittee(user);
                     }
                     catch (JSONException e){
                         Log.e(TAG, "Hit json exception while parcing, error: " + e);
@@ -77,76 +82,64 @@ public class GoogleAPI {
         }
 
         //parse MyOfficials fromJson Object
-        private static MyOfficials parseMyOfficials(JSONObject jsonObject) throws JSONException {
+        public static MyOfficials parseMyOfficials(JSONObject jsonObject) throws JSONException {
             MyOfficials myOfficials = new MyOfficials();
             JSONArray officesArray = jsonObject.getJSONArray("officials");
             for (int i = 0; i < officesArray.length() ; i++) {
                 JSONObject official = officesArray.getJSONObject(i);
 
-                Representative representative = new Representative();
+                Representative politician = new Representative();
 
-                representative.setName(official.getString("name"));
-                representative.setParty(official.getString("party"));
-                representative.setWebsite(official.getJSONArray("urls").getString(0));
+                politician.setName(official.getString("name"));
+                politician.setParty(official.getString("party"));
+                politician.setWebsite(official.getJSONArray("urls").getString(0));
 
                 //set photoURL if available
                 if (official.has("photoUrl")){
-                    representative.setProfileImage(official.getString("photoUrl"));
+                    politician.setProfileImage(official.getString("photoUrl"));
                 }
                 else{
-                    representative.setProfileImage("N/A");
-                    Log.i(TAG, representative.getName() + " no photoUrl available");
+                    politician.setProfileImage("N/A");
+                    Log.i(TAG, politician.getName() + " no photoUrl available");
                 }
 
                 //set social media accounts if available
                 JSONArray channels = official.getJSONArray("channels");
-                representative.setFb("N/A");
-                representative.setTwitter("N/A");
+                politician.setFb("N/A");
+                politician.setTwitter("N/A");
                 for (int j = 0; j < channels.length() ; j++) {
                     JSONObject channel = channels.getJSONObject(j);
                     if (channel.getString("type").equals("Facebook")){
-                        representative.setFb(channel.getString("id"));
+                        politician.setFb(channel.getString("id"));
                     }
                     else if (channel.getString("type").equals("Twitter")){
-                        representative.setTwitter(channel.getString("id"));
+                        politician.setTwitter(channel.getString("id"));
                     }
                 }
 
-                //set representative as official
+                //set politician as official
                 if (i == 0){
-                    representative.setOffice(Offices.PRESIDENT);
-                    myOfficials.setPresident(representative);
+                    politician.setOffice(Offices.PRESIDENT);
+                    myOfficials.setPresident(politician);
                 }
                 else if (i == 1){
-                    representative.setOffice(Offices.VICE_PRESIDENT);
-                    myOfficials.setVicePresident(representative);
+                    politician.setOffice(Offices.VICE_PRESIDENT);
+                    myOfficials.setVicePresident(politician);
                 }
                 else if (i == 2){
-                    representative.setOffice(Offices.SENATE);
-                    myOfficials.setSeniorSenator(representative);
+                    politician.setOffice(Offices.SENATE);
+                    myOfficials.setSeniorSenator(politician);
                 }
                 else if (i == 3){
-                    representative.setOffice(Offices.SENATE);
-                    myOfficials.setJuniorSenator(representative);
+                    politician.setOffice(Offices.SENATE);
+                    myOfficials.setJuniorSenator(politician);
                 }
                 else if (i == 4){
-                    representative.setOffice(Offices.HOUSE_OF_REPRESENTATIVES);
-                    myOfficials.setCongressman(representative);
+                    politician.setOffice(Offices.HOUSE_OF_REPRESENTATIVES);
+                    myOfficials.setCongressman(politician);
                 }
             }
             return myOfficials;
-        }
-
-        private static void parseDistrict(JSONObject jsonObject, User user) throws JSONException {
-            JSONArray officesArray = jsonObject.getJSONArray("offices");
-            for (int i = 0; i < officesArray.length(); i++){
-                JSONObject office = officesArray.getJSONObject(i);
-                if (office.getString("name").equals("U.S. Representative")){
-                    int index = office.getString("divisionId").indexOf("cd:");
-                    user.setDistrict(office.getString("divisionId").substring(index + 3));
-                    return;
-                }
-            }
         }
     }
 
