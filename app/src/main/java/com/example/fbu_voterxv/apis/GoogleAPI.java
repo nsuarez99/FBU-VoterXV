@@ -58,7 +58,7 @@ public class GoogleAPI {
                     Log.d(TAG, "onSuccess setMyOfficials");
                     JSONObject jsonObject = json.jsonObject;
                     try{
-                        user.setDistrict(parseDistrict(jsonObject, user));
+                        parseDistrict(jsonObject, user);
                         user.setOfficials(parseMyOfficials(jsonObject));
                         Log.i(TAG, user.getOfficials().toString());
                         ProPublicaAPI.OfficialsYearsCommitteeParse.setRepYearsCommittee(user);
