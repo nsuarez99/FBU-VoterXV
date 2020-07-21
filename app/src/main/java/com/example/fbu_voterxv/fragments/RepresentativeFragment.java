@@ -5,8 +5,10 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -14,11 +16,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.fbu_voterxv.R;
+import com.example.fbu_voterxv.models.Offices;
 import com.example.fbu_voterxv.models.Representative;
+import com.example.fbu_voterxv.models.User;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.parceler.Parcels;
 import org.w3c.dom.Text;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class RepresentativeFragment extends Fragment {
 
@@ -32,6 +40,7 @@ public class RepresentativeFragment extends Fragment {
     private TextView office;
     private TextView website;
     private Representative representative;
+    private BottomNavigationView bottomNavigationView;
 
 
     public RepresentativeFragment() {
@@ -61,7 +70,6 @@ public class RepresentativeFragment extends Fragment {
         office = getActivity().findViewById(R.id.representativeOffice);
         website = getActivity().findViewById(R.id.representativeWebsite);
 
-        Glide.with(getContext()).load(representative.getProfileImage()).placeholder(R.drawable.officials).into(image);
         name.setText(representative.getName());
         party.setText(representative.getParty());
         committee.setText(representative.getCommittee());
@@ -71,6 +79,48 @@ public class RepresentativeFragment extends Fragment {
         office.setText(representative.getOffice().toString());
         website.setText(representative.getWebsite());
 
+        if (representative.getOffice() == Offices.PRESIDENT || representative.getOffice() == Offices.VICE_PRESIDENT){
+            committee.setVisibility(View.GONE);
+            getActivity().findViewById(R.id.committee).setVisibility(View.GONE);
+        }
 
+        int radius = 40;
+        int margin = 0;
+        Glide.with(getContext()).load(representative.getProfileImage()).placeholder(R.drawable.officials).transform(new RoundedCornersTransformation(radius, margin)).into(image);
+
+
+        final FragmentManager fragmentManager = getChildFragmentManager();
+        bottomNavigationView = getActivity().findViewById(R.id.votingHistoryNavigation);
+        final Fragment gunVotingHistory = new GunVotingHistoryFragment();
+        final Fragment taxesVotingHistory = new TaxesVotingHistoryFragment();
+
+
+        //set up bottom navigation
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                Fragment fragment;
+                switch (menuItem.getItemId()) {
+                    case R.id.climateControlIcon:
+                        fragment = gunVotingHistory;
+                        break;
+                    case R.id.taxesIcon:
+                        fragment = taxesVotingHistory;
+                        break;
+                    default:
+                        fragment = gunVotingHistory;
+                        break;
+                }
+//                //pass user data with fragment
+//                Bundle bundle = new Bundle();
+//                bundle.putParcelable("user", Parcels.wrap(user));
+//                fragment.setArguments(bundle);
+
+                //set fragment
+                fragmentManager.beginTransaction().replace(R.id.frameLayoutContainer, fragment).commit();
+                return true;
+            }
+        });
+        bottomNavigationView.setSelectedItemId(R.id.climateControlIcon);
     }
 }
