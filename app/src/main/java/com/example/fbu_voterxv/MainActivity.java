@@ -12,23 +12,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.example.fbu_voterxv.apis.FecAPI;
 import com.example.fbu_voterxv.apis.GoogleAPI;
 import com.example.fbu_voterxv.fragments.ElectionsFragment;
 import com.example.fbu_voterxv.fragments.OfficialsFragment;
 import com.example.fbu_voterxv.fragments.ProfileFragment;
 import com.example.fbu_voterxv.fragments.SettingsFragment;
-import com.example.fbu_voterxv.models.Election;
-import com.example.fbu_voterxv.models.MyOfficials;
 import com.example.fbu_voterxv.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,6 +31,10 @@ public class MainActivity extends AppCompatActivity {
     private ImageView profileImage;
     private BottomNavigationView bottomNavigationView;
     private User user;
+    private final Fragment officialsFragment = new OfficialsFragment();
+    private final Fragment electionsFragment = new ElectionsFragment();
+    private final Fragment settingsFragment = new SettingsFragment();
+    private final Fragment profileFragment = new ProfileFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
-        // define your fragments here
-        final Fragment officialsFragment = new OfficialsFragment();
-        final Fragment electionsFragment = new ElectionsFragment();
-        final Fragment settingsFragment = new SettingsFragment();
-        final Fragment profileFragment = new ProfileFragment();
 
         profileImage = findViewById(R.id.profile);
         toolbar = findViewById(R.id.toolbar);
@@ -139,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         user.setAge(parseUser.getInt("age"));
         user.setImage(parseUser.getParseFile("image"));
 
-        GoogleAPI.OfficialsParse.setMyOfficials(user);
+        GoogleAPI.OfficialsParse.setMyOfficials(user, officialsFragment, getSupportFragmentManager().beginTransaction());
         GoogleAPI.ElectionParse.setElections(user);
 
     }

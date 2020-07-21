@@ -2,10 +2,14 @@ package com.example.fbu_voterxv.apis;
 
 import android.util.Log;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.fbu_voterxv.BuildConfig;
+import com.example.fbu_voterxv.fragments.OfficialsFragment;
 import com.example.fbu_voterxv.models.Candidate;
 import com.example.fbu_voterxv.models.Election;
 import com.example.fbu_voterxv.models.MyOfficials;
@@ -45,7 +49,7 @@ public class GoogleAPI {
     public static class OfficialsParse{
 
         //sets myOfficials and district
-        public static void setMyOfficials(final User user) {
+        public static void setMyOfficials(final User user, final Fragment officialsFragment, final FragmentTransaction fragmentTransaction) {
             final String URL = BASE_URL + "representatives";
             AsyncHttpClient client = new AsyncHttpClient();
 
@@ -61,6 +65,9 @@ public class GoogleAPI {
                         user.setOfficials(parseMyOfficials(jsonObject));
                         Log.i(TAG, user.getOfficials().toString());
                         ProPublicaAPI.OfficialsParse.setRepBasicInfo(user);
+                        fragmentTransaction.detach(officialsFragment);
+                        fragmentTransaction.attach(officialsFragment);
+                        fragmentTransaction.commit();
                     }
                     catch (JSONException e){
                         Log.e(TAG, "Hit json exception while parcing, error: " + e);
