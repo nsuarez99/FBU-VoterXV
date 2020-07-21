@@ -112,9 +112,8 @@ public class ProPublicaAPI {
             int seniorYears = Integer.parseInt(seniorSenator.getYears().substring(seniorSenator.getYears().length() - 4));
 
             if (juniorYears < seniorYears){
-                Representative temp = seniorSenator;
-                seniorSenator = juniorSenator;
-                juniorSenator = temp;
+                myOfficials.setJuniorSenator(seniorSenator);
+                myOfficials.setSeniorSenator(juniorSenator);
             }
 
         }
