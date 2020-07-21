@@ -235,7 +235,7 @@ public class ProPublicaAPI {
                     committeeString += committee.getString("name") + ", ";
                 }
             if (committees.length() != 0){
-                committeeString.substring(0, committeeString.length() - 2);
+                committeeString = committeeString.substring(0, committeeString.length() - 2);
                 representative.setCommittee(committeeString);
             }
             else{

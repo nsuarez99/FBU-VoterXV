@@ -123,13 +123,16 @@ public class GoogleAPI {
                     }
                 }
 
+                //TODO find API so don't have to hard code president dates
                 //set representative as official
                 if (i == 0){
                     representative.setOffice(Offices.PRESIDENT);
+                    representative.setYears("2016 - 2020");
                     myOfficials.setPresident(representative);
                 }
                 else if (i == 1){
                     representative.setOffice(Offices.VICE_PRESIDENT);
+                    representative.setYears("2016 - 2020");
                     myOfficials.setVicePresident(representative);
                 }
                 else if (i == 2){
