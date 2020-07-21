@@ -93,7 +93,11 @@ public class GoogleAPI {
 
                 representative.setName(official.getString("name"));
                 String party = official.getString("party");
-                representative.setParty(party.substring(0, party.indexOf(" ")));
+                int space_index = party.indexOf(" ");
+                if (space_index == -1){
+                    space_index = party.length();
+                }
+                representative.setParty(party.substring(0, space_index));
                 representative.setWebsite(official.getJSONArray("urls").getString(0));
 
                 //set photoURL if available
