@@ -43,6 +43,7 @@ public class SettingsFragment extends Fragment {
                 Log.i(TAG, "Should be null: " + ParseUser.getCurrentUser());
                 Intent i = new Intent(getContext(), LoginActivity.class);
                 startActivity(i);
+                getActivity().finish();
             }
         });
     }
