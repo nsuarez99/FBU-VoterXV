@@ -92,7 +92,8 @@ public class GoogleAPI {
                 Representative representative = new Representative();
 
                 representative.setName(official.getString("name"));
-                representative.setParty(official.getString("party"));
+                String party = official.getString("party");
+                representative.setParty(party.substring(0, party.indexOf(" ")));
                 representative.setWebsite(official.getJSONArray("urls").getString(0));
 
                 //set photoURL if available
