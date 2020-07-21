@@ -1,18 +1,13 @@
 package com.example.fbu_voterxv.apis;
 
-import android.graphics.Movie;
-import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
+import com.codepath.asynchttpclient.RequestHeaders;
 import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.fbu_voterxv.BuildConfig;
-import com.example.fbu_voterxv.R;
-import com.example.fbu_voterxv.models.Candidate;
-import com.example.fbu_voterxv.models.Election;
 import com.example.fbu_voterxv.models.MyOfficials;
-import com.example.fbu_voterxv.models.Offices;
 import com.example.fbu_voterxv.models.Representative;
 import com.example.fbu_voterxv.models.User;
 
@@ -20,154 +15,48 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 import okhttp3.Headers;
 
-public class GoogleAPI {
+public class ProPublicaAPI {
 
-    public static final String TAG = "GoogleAPI";
-    private static final String BASE_URL = "https://www.googleapis.com/civicinfo/v2/";
-    private static final String KEY = BuildConfig.GOOGLE_KEY;
+    public static final String TAG = "ProPublicaAPI";
+    private static final String BASE_URL = "https://api.propublica.org/congress/v1/members/";
+    private static final String KEY = BuildConfig.PROPPUBLICA_KEY;
 
-    public static String capitalizeWord(String str){
-        String words[] = str.split("\\s");
-        String capitalizeWord = "";
-        for(String word : words){
-            String first = word.substring(0,1);
-            String rest = word.substring(1);
-            capitalizeWord += first.toUpperCase() + rest + " ";
-        }
-        return capitalizeWord.trim();
-    }
 
     public static class OfficialsParse{
 
-        //sets myOfficials and district
-        public static void setMyOfficials(final User user) {
-            final String URL = BASE_URL + "representatives";
-            AsyncHttpClient client = new AsyncHttpClient();
-
-            //TODO figure out if can split this into parameter without roles overrideing
-            String complete = URL + "?address=" + user.getAddress() + "&levels=country&roles=legislatorLowerBody&roles=legislatorUpperBody&roles=headOfGovernment&roles=deputyHeadOfGovernment&key=" + KEY;
-
-            client.get(complete, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Headers headers, JSON json) {
-                    Log.d(TAG, "onSuccess setMyOfficials");
-                    JSONObject jsonObject = json.jsonObject;
-                    try{
-                        user.setDistrict(jsonObject);
-                        user.setOfficials(parseMyOfficials(jsonObject));
-                        Log.i(TAG, user.getOfficials().toString());
-                    }
-                    catch (JSONException e){
-                        Log.e(TAG, "Hit json exception while parcing, error: " + e);
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                    Log.d(TAG, String.format("onFailure Officials: \nstatusCode:%d \nresponse:%s", statusCode, response));
-                }
-            });
+        //sets senators, congressman years, committees, party
+        public static void setRepBasicInfo(final User user) {
+            setCongressmanInfo(user);
+            setSenatorsInfo(user);
         }
 
-        //parse MyOfficials fromJson Object
-        public static MyOfficials parseMyOfficials(JSONObject jsonObject) throws JSONException {
-            MyOfficials myOfficials = new MyOfficials();
-            JSONArray officesArray = jsonObject.getJSONArray("officials");
-            for (int i = 0; i < officesArray.length() ; i++) {
-                JSONObject official = officesArray.getJSONObject(i);
+        private static void setSenatorsInfo(final User user){
+            String chamber = "senate";
+            String state = user.getState();
+            String arguments = String.format("/%s/%s/current.json", chamber, state);
+            final String URL = BASE_URL + arguments;
 
-                Representative politician = new Representative();
-
-                politician.setName(official.getString("name"));
-                politician.setParty(official.getString("party"));
-                politician.setWebsite(official.getJSONArray("urls").getString(0));
-
-                //set photoURL if available
-                if (official.has("photoUrl")){
-                    politician.setProfileImage(official.getString("photoUrl"));
-                }
-                else{
-                    politician.setProfileImage("N/A");
-                    Log.i(TAG, politician.getName() + " no photoUrl available");
-                }
-
-                //set social media accounts if available
-                JSONArray channels = official.getJSONArray("channels");
-                politician.setFb("N/A");
-                politician.setTwitter("N/A");
-                for (int j = 0; j < channels.length() ; j++) {
-                    JSONObject channel = channels.getJSONObject(j);
-                    if (channel.getString("type").equals("Facebook")){
-                        politician.setFb(channel.getString("id"));
-                    }
-                    else if (channel.getString("type").equals("Twitter")){
-                        politician.setTwitter(channel.getString("id"));
-                    }
-                }
-
-                //set politician as official
-                if (i == 0){
-                    politician.setOffice(Offices.PRESIDENT);
-                    myOfficials.setPresident(politician);
-                }
-                else if (i == 1){
-                    politician.setOffice(Offices.VICE_PRESIDENT);
-                    myOfficials.setVicePresident(politician);
-                }
-                else if (i == 2){
-                    politician.setOffice(Offices.SENATE);
-                    myOfficials.setSeniorSenator(politician);
-                }
-                else if (i == 3){
-                    politician.setOffice(Offices.SENATE);
-                    myOfficials.setJuniorSenator(politician);
-                }
-                else if (i == 4){
-                    politician.setOffice(Offices.HOUSE_OF_REPRESENTATIVES);
-                    myOfficials.setCongressman(politician);
-                }
-            }
-            return myOfficials;
-        }
-    }
-
-
-    public static class ElectionParse{
-
-        //TODO check president tag
-        private static final String ELECTION_CONGRESSMAN = "REPRESENTATIVE IN CONGRESS";
-        private static final String ELECTION_SENATOR = "UNITED STATES SENATOR";
-        private static final String ELECTION_PRESIDENT = "UNTIED STATES PRESIDENT";
-
-        //sets myOfficials and district
-        public static void setElections(final User user) {
-            final String URL = BASE_URL + "voterinfo";
-            AsyncHttpClient client = new AsyncHttpClient();
             RequestParams params = new RequestParams();
-            params.put("key", KEY);
-            params.put("address", user.getAddress());
-            params.put("officialOnly", false);
-
-            client.get(URL, params, new JsonHttpResponseHandler() {
+            RequestHeaders headers = new RequestHeaders();
+            headers.put("X-API-Key", KEY);
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.get(URL, headers, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Headers headers, JSON json) {
-                    Log.d(TAG, "onSuccess setElection");
+                    Log.d(TAG, "onSuccess senateYears");
                     JSONObject jsonObject = json.jsonObject;
                     try{
-                        user.setElectionsList(parseElectionList(jsonObject));
-                        FecAPI.CandidateParse.setCandidates(user);
+                        JSONArray jsonArray = jsonObject.getJSONArray("results");
+                        parseReps(jsonArray, user.getOfficials().getJuniorSenator());
+                        parseReps(jsonArray, user.getOfficials().getSeniorSenator());
+                        setJuniorSeniorSenator(user.getOfficials());
                     }
                     catch (JSONException e){
                         Log.e(TAG, "Hit json exception while parcing, error: " + e);
@@ -177,75 +66,184 @@ public class GoogleAPI {
 
                 @Override
                 public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                    user.setElectionsList(new ArrayList<Election>());
-                    Log.d(TAG, String.format("onFailure Elections: \nstatusCode:%d \nresponse:%s", statusCode, response));
+                    Log.d(TAG, String.format("onFailure senatorYears: \nstatusCode:%d \nresponse:%s", statusCode, response));
                 }
             });
         }
 
+        private static void setCongressmanInfo(final User user){
+            String chamber = "house";
+            String state = user.getState();
+//            String district = user.getDistrict();
+            String arguments = String.format("/%s/%s/current.json", chamber, state);
+            final String URL = BASE_URL + arguments;
 
-        //creates a list of Elections
-        public static List<Election> parseElectionList(JSONObject jsonObject) throws JSONException {
-            String election_name = jsonObject.getJSONObject("election").getString("name");
-            Date election_day = parseElectionTime(jsonObject.getJSONObject("election").getString("electionDay"));
-            List<Election> electionsList = new ArrayList<>();
-
-            JSONArray electionsJsonArray = jsonObject.getJSONArray("contests");
-
-            for (int i = 0; i < electionsJsonArray.length(); i++) {
-                JSONObject electionsJSONObject = electionsJsonArray.getJSONObject(i);
-
-                Election election = new Election();
-                election.setDate(election_day);
-
-                String office = electionsJSONObject.getString("office");
-                if (office.equals(ELECTION_CONGRESSMAN)){
-                    election.setName(election_name + " -\n" + Offices.HOUSE_OF_REPRESENTATIVES);
-                    parseCandidate(electionsJSONObject, election, Offices.HOUSE_OF_REPRESENTATIVES);
-                    electionsList.add(election);
+            RequestParams params = new RequestParams();
+            RequestHeaders headers = new RequestHeaders();
+            headers.put("X-API-Key", KEY);
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.get(URL, headers, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Headers headers, JSON json) {
+                    Log.d(TAG, "onSuccess congressmanYears");
+                    JSONObject jsonObject = json.jsonObject;
+                    try{
+                        JSONArray jsonArray = jsonObject.getJSONArray("results");
+                        parseReps(jsonArray, user.getOfficials().getCongressman());
+                    }
+                    catch (JSONException e){
+                        Log.e(TAG, "Hit json exception while parcing, error: " + e);
+                        e.printStackTrace();
+                    }
                 }
-                else if (office.equals(ELECTION_SENATOR)){
-                    election.setName(election_name + " -\n" + Offices.SENATE);
-                    parseCandidate(electionsJSONObject, election, Offices.SENATE);
-                    electionsList.add(election);
+
+                @Override
+                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                    Log.d(TAG, String.format("onFailure congressmanYears: \nstatusCode:%d \nresponse:%s", statusCode, response));
                 }
-                else if (office.equals(ELECTION_PRESIDENT)){
-                    election.setName(election_name + " -\n" + Offices.PRESIDENT);
-                    parseCandidate(electionsJSONObject, election, Offices.PRESIDENT);
-                    electionsList.add(election);
-                }
-            }
-            return electionsList;
+            });
         }
 
-        //creates a single Election
-        private static void parseCandidate(JSONObject jsonObject, Election election, Offices office) throws JSONException {
-            JSONArray candidatesJsonArray = jsonObject.getJSONArray("candidates");
-            List<Candidate> candidates = new ArrayList<>();
-            election.setCandidates(candidates);
+        //setting the correct order of junior and senior senators
+        private static void setJuniorSeniorSenator(MyOfficials myOfficials){
+            Representative seniorSenator = myOfficials.getSeniorSenator();
+            Representative juniorSenator = myOfficials.getJuniorSenator();
+            int juniorYears = Integer.parseInt(juniorSenator.getYears().substring(juniorSenator.getYears().length() - 4));
+            int seniorYears = Integer.parseInt(seniorSenator.getYears().substring(seniorSenator.getYears().length() - 4));
 
-            //set candidate name and party and add to list
-            for (int i = 0; i < candidatesJsonArray.length() ; i++) {
-                JSONObject candidatesJsonObject = candidatesJsonArray.getJSONObject(i);
-                Candidate candidate = new Candidate();
-                candidate.setOffice(office);
-                candidate.setName(candidatesJsonObject.getString("name"));
-                candidate.setParty(capitalizeWord(candidatesJsonObject.getString("party").toLowerCase()));
-                candidates.add(candidate);
+            if (juniorYears < seniorYears){
+                Representative temp = seniorSenator;
+                seniorSenator = juniorSenator;
+                juniorSenator = temp;
+            }
+
+        }
+
+        //parse fromJson Object party, committee, years
+        private static void parseReps(JSONArray jsonArray, Representative representative) throws JSONException {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                if (nameEquals(representative.getName(), jsonObject.getString("name"))){
+
+                    //set years in office
+                    int years = Integer.parseInt(jsonObject.getString("seniority"));
+                    String electionYear = jsonObject.getString("next_election");
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy");
+                    Date date = new Date();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date);
+                    calendar.add(Calendar.YEAR, years * -1);
+                    String startYear = format.format(calendar.getTime());
+                    representative.setYears(startYear + " - " + electionYear);
+
+                    //set party
+                    String party = jsonObject.getString("party");
+                    representative.setParty(parseParty(party));
+
+                    //set committees
+                    String id = jsonObject.getString("id");
+                    getCommittees(id, representative);
+                    return;
+                }
             }
         }
 
-        public static Date parseElectionTime(String rawJsonTime){
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = new Date();
-            try{
-                date = dateFormat.parse(rawJsonTime);
-            } catch (ParseException e) {
-                Log.e(TAG, "error parsing date");
-                e.printStackTrace();
+        private static String parseParty(String party){
+            if (party.equals("I")){
+                return "Independent";
             }
-            return date;
+            else if (party.equals("D")){
+                return "Democrat";
+            }
+            if (party.equals("R")){
+                return "Republican";
+            }
+            if (party.equals("L")){
+                return "Libertarian";
+            }
+            return party;
+        }
+
+        private static boolean nameEquals(String repName, String jsonObjectName){
+            String[] repNameArray = repName.split("\\s+");
+            String[] jsonObjectNameArray = jsonObjectName.split("\\s+");
+
+            //just in case someone has a double last name
+            if (repNameArray.length >= 3){
+                repNameArray[1] = "";
+            }
+            if (jsonObjectNameArray.length >= 3){
+                jsonObjectNameArray[1] = "";
+            }
+            repName = arrayToString(repNameArray);
+            jsonObjectName = arrayToString(jsonObjectNameArray);
+            return repName.equals(jsonObjectName);
+        }
+
+        private static String arrayToString(String[] array){
+            String word = "";
+            for (int i = 0; i < array.length ; i++) {
+                word += array[i];
+            }
+            return word;
+        }
+
+        private static void getCommittees(String id, final Representative representative){
+            final String URL = BASE_URL + id + ".json";
+
+            RequestParams params = new RequestParams();
+            RequestHeaders headers = new RequestHeaders();
+            headers.put("X-API-Key", KEY);
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.get(URL, headers, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Headers headers, JSON json) {
+                    Log.d(TAG, "onSuccess repCommittee: " + representative.getName());
+                    JSONObject jsonObject = json.jsonObject;
+                    try{
+                        JSONArray jsonArray = jsonObject.getJSONArray("results");
+                        parseCommittee(jsonArray, representative);
+                    }
+                    catch (JSONException e){
+                        Log.e(TAG, "Hit json exception while parcing, error: " + e);
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                    Log.d(TAG, String.format("onFailure repCommittee: %s \nstatusCode:%d \nresponse:%s", representative.getName(), statusCode, response));
+                }
+            });
+        }
+
+        private static void parseCommittee(JSONArray jsonArray, Representative representative) throws JSONException {
+            if (jsonArray.length() > 1) {
+                Log.e(TAG, "more than 1 result for representative: "  + jsonArray);
+                return;
+            }
+            else if (jsonArray.length() == 0){
+                Log.e(TAG, "0 result for representative: " + jsonArray);
+                return;
+            }
+
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+            JSONObject latestCongress = jsonObject.getJSONArray("roles").getJSONObject(0);
+            JSONArray committees = latestCongress.getJSONArray("committees");
+            String committeeString = "";
+                for (int i = 0; i < committees.length() ; i++) {
+                    JSONObject committee = committees.getJSONObject(i);
+                    committeeString += committee.getString("name") + ", ";
+                }
+            if (committees.length() != 0){
+                committeeString.substring(0, committeeString.length() - 2);
+                representative.setCommittee(committeeString);
+            }
+            else{
+                representative.setCommittee("None");
+            }
         }
     }
+
 
 }

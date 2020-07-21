@@ -18,7 +18,7 @@
     <ImageView
         android:id="@+id/representativeImage"
         android:layout_width="150dp"
-        android:layout_height="170dp"
+        android:layout_height="180dp"
         android:layout_marginRight="4dp"
         android:layout_below="@id/representativeName"
         android:src="@drawable/officials" />
@@ -113,7 +113,7 @@
         android:autoSizeTextType="uniform"
         android:gravity="bottom"
         android:autoSizeMaxTextSize="16dp"
-        android:maxLines="1"/>
+        android:maxLines="3"/>
 
     <TextView
         android:id="@+id/website"

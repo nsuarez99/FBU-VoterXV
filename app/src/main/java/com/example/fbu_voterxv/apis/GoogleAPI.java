@@ -49,7 +49,6 @@ public class GoogleAPI {
             final String URL = BASE_URL + "representatives";
             AsyncHttpClient client = new AsyncHttpClient();
 
-            //TODO figure out if can split this into parameter without roles overrideing
             String complete = URL + "?address=" + user.getAddress() + "&levels=country&roles=legislatorLowerBody&roles=legislatorUpperBody&roles=headOfGovernment&roles=deputyHeadOfGovernment&key=" + KEY;
 
             client.get(complete, new JsonHttpResponseHandler() {
@@ -61,7 +60,7 @@ public class GoogleAPI {
                         parseDistrict(jsonObject, user);
                         user.setOfficials(parseMyOfficials(jsonObject));
                         Log.i(TAG, user.getOfficials().toString());
-                        ProPublicaAPI.OfficialsYearsCommitteeParse.setRepYearsCommittee(user);
+                        ProPublicaAPI.OfficialsParse.setRepBasicInfo(user);
                     }
                     catch (JSONException e){
                         Log.e(TAG, "Hit json exception while parcing, error: " + e);
