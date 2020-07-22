@@ -127,7 +127,10 @@
         android:layout_toRightOf="@+id/website"
         android:textSize="16dp"
         android:layout_marginBottom="4dp"
-        tools:text="http://whitehouse.barackobama.com"/>
+        android:autoLink="all"
+        android:linksClickable="true"
+        android:textColorLink="@android:color/tab_indicator_text"
+        tools:text="https://whitehouse.barackobama.com"/>
 
     <TextView
         android:id="@+id/fb"
