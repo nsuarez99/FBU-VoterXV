@@ -20,6 +20,7 @@ android {
         buildConfigField("String", "GOOGLE_KEY", apikeyProperties['GOOGLE_KEY'])
         buildConfigField("String", "FEC_KEY", apikeyProperties['FEC_KEY'])
         buildConfigField("String", "PROPPUBLICA_KEY", apikeyProperties['PROPPUBLICA_KEY'])
+        resValue ("string", "GOOGLE_KEY", apikeyProperties['GOOGLE_KEY'])
 
     }
 
@@ -29,6 +30,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+}
+
+ext {
+    permissionDispatcherVersion = "4.7.0"
+    supportLibVersion = "1.0.0"
+    googlePlayVersion = "17.0.0"
 }
 
 dependencies {
@@ -52,4 +59,9 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
     implementation "androidx.appcompat:appcompat:${appCompatVersion}"
     implementation "com.google.android.material:material:${designSupportVersion}"
+
+    implementation "com.google.android.gms:play-services-maps:$googlePlayVersion"
+    implementation "com.google.android.gms:play-services-location:$googlePlayVersion"
+    implementation "org.permissionsdispatcher:permissionsdispatcher:$permissionDispatcherVersion"
+    annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:$permissionDispatcherVersion"
 }
