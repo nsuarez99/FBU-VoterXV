@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +56,7 @@ public class OfficialsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_officials, container, false);
+
     }
 
     @Override
@@ -64,6 +66,10 @@ public class OfficialsFragment extends Fragment {
         //get officials data
         user = Parcels.unwrap(getArguments().getParcelable("user"));
         myOfficials = user.getOfficials();
+
+        if (myOfficials != null){
+            Log.i(TAG, myOfficials.toString());
+        }
 
         //set fragmentManager and fragment
         fragmentManager = getActivity().getSupportFragmentManager();

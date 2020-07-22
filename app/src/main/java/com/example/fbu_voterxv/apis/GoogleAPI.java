@@ -1,5 +1,6 @@
 package com.example.fbu_voterxv.apis;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.fragment.app.Fragment;
@@ -9,6 +10,7 @@ import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.fbu_voterxv.BuildConfig;
+import com.example.fbu_voterxv.R;
 import com.example.fbu_voterxv.fragments.OfficialsFragment;
 import com.example.fbu_voterxv.models.Candidate;
 import com.example.fbu_voterxv.models.Election;
@@ -16,10 +18,12 @@ import com.example.fbu_voterxv.models.MyOfficials;
 import com.example.fbu_voterxv.models.Offices;
 import com.example.fbu_voterxv.models.Representative;
 import com.example.fbu_voterxv.models.User;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -49,7 +53,7 @@ public class GoogleAPI {
     public static class OfficialsParse{
 
         //sets myOfficials and district
-        public static void setMyOfficials(final User user, final Fragment officialsFragment, final FragmentTransaction fragmentTransaction) {
+        public static void setMyOfficials(final User user, final Fragment officialsFragment, final FragmentTransaction fragmentTransaction, BottomNavigationView bottomNavigationView) {
             final String URL = BASE_URL + "representatives";
             AsyncHttpClient client = new AsyncHttpClient();
 
@@ -65,9 +69,14 @@ public class GoogleAPI {
                         user.setOfficials(parseMyOfficials(jsonObject));
                         Log.i(TAG, user.getOfficials().toString());
                         ProPublicaAPI.OfficialsParse.setRepBasicInfo(user);
-                        fragmentTransaction.detach(officialsFragment);
-                        fragmentTransaction.attach(officialsFragment);
-                        fragmentTransaction.commit();
+
+                        //reload myofficials page
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("user", Parcels.wrap(user));
+                        Fragment fragment = new OfficialsFragment();
+                        fragment.setArguments(bundle);
+                        fragmentTransaction.replace(R.id.frameLayoutContainer, fragment).commit();
+                        Log.i(TAG, "reloaded officials");
                     }
                     catch (JSONException e){
                         Log.e(TAG, "Hit json exception while parcing, error: " + e);

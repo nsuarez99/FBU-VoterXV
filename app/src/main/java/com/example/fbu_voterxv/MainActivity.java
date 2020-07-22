@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.example.fbu_voterxv.apis.GoogleAPI;
 import com.example.fbu_voterxv.fragments.ElectionsFragment;
 import com.example.fbu_voterxv.fragments.OfficialsFragment;
@@ -23,6 +24,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,16 +38,14 @@ public class MainActivity extends AppCompatActivity {
     private final Fragment electionsFragment = new ElectionsFragment();
     private final Fragment settingsFragment = new SettingsFragment();
     private final Fragment profileFragment = new ProfileFragment();
+    private final FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-
-
-        profileImage = findViewById(R.id.profile);
+        profileImage = findViewById(R.id.profileToolbar);
         toolbar = findViewById(R.id.toolbar);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         setSupportActionBar(toolbar);
@@ -92,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
                         fragment = officialsFragment;
                         break;
                 }
-
                 //pass user data with fragment
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("user", Parcels.wrap(user));
@@ -131,8 +131,14 @@ public class MainActivity extends AppCompatActivity {
         user.setParty(parseUser.getString("party"));
         user.setAge(parseUser.getInt("age"));
         user.setImage(parseUser.getParseFile("image"));
+        if (user.getImage() != null){
+            int radius = 100;
+            int margin = 0;
+            Glide.with(MainActivity.this).load(user.getImage().getUrl()).placeholder(R.drawable.person).transform(new RoundedCornersTransformation(radius, margin)).into(profileImage);
+        }
 
-        GoogleAPI.OfficialsParse.setMyOfficials(user, officialsFragment, getSupportFragmentManager().beginTransaction());
+        //get user representatives and election data
+        GoogleAPI.OfficialsParse.setMyOfficials(user, officialsFragment, fragmentManager.beginTransaction(), bottomNavigationView);
         GoogleAPI.ElectionParse.setElections(user);
 
     }
