@@ -31,6 +31,11 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
 
         if (ParseUser.getCurrentUser() != null){
+            try {
+                ParseUser.getCurrentUser().fetch();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             goMainActivity();
         }
     }
