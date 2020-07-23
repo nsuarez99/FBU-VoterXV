@@ -530,7 +530,6 @@ public class ProfileFragment extends Fragment implements GoogleMap.OnMapLongClic
         mCurrentLocation = location;
         LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
-        map.animateCamera(cameraUpdate);
     }
 
     public void onSaveInstanceState(Bundle savedInstanceState) {
