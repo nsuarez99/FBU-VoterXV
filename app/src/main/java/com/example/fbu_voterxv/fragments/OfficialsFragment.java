@@ -1,6 +1,5 @@
 package com.example.fbu_voterxv.fragments;
 
-import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_voterxv.R;
+import com.example.fbu_voterxv.models.Bill;
 import com.example.fbu_voterxv.models.MyOfficials;
 import com.example.fbu_voterxv.models.Politician;
 import com.example.fbu_voterxv.models.Representative;
@@ -24,12 +24,16 @@ import com.example.fbu_voterxv.models.User;
 
 import org.parceler.Parcels;
 
+import java.util.List;
+import java.util.Map;
+
 
 public class OfficialsFragment extends Fragment {
 
     public static final String TAG = "OfficialsFragment";
     private User user;
     private MyOfficials myOfficials;
+    private Map<String, List<Bill>> bills;
     private FragmentManager fragmentManager;
     private Fragment fragment;
     private ImageView presidentImage;
@@ -66,6 +70,8 @@ public class OfficialsFragment extends Fragment {
         //get officials data
         user = Parcels.unwrap(getArguments().getParcelable("user"));
         myOfficials = user.getOfficials();
+        bills = Parcels.unwrap(getArguments().getParcelable("bills"));
+
 
         if (myOfficials != null){
             Log.i(TAG, myOfficials.toString());
@@ -175,7 +181,8 @@ public class OfficialsFragment extends Fragment {
     private void goToFragment(Politician representative){
         Bundle bundle = new Bundle();
         bundle.putParcelable("representative", Parcels.wrap(representative));
+        bundle.putParcelable("bills", Parcels.wrap(bills));
         fragment.setArguments(bundle);
-        fragmentManager.beginTransaction().replace(R.id.frameLayoutContainer, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.layoutContainer, fragment).commit();
     }
 }

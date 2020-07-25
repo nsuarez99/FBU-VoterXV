@@ -11,25 +11,26 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.fbu_voterxv.R;
+import com.example.fbu_voterxv.models.Bill;
 import com.example.fbu_voterxv.models.Offices;
 import com.example.fbu_voterxv.models.Representative;
-import com.example.fbu_voterxv.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.parceler.Parcels;
-import org.w3c.dom.Text;
+
+import java.util.List;
+import java.util.Map;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class RepresentativeFragment extends Fragment {
 
+    public static final String TAG = "RepresentativeFragment";
     private ImageView image;
     private TextView name;
     private TextView party;
@@ -41,6 +42,7 @@ public class RepresentativeFragment extends Fragment {
     private TextView website;
     private Representative representative;
     private BottomNavigationView bottomNavigationView;
+    private Map<String, List<Bill>> bills;
 
 
     public RepresentativeFragment() {
@@ -59,6 +61,8 @@ public class RepresentativeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         representative = Parcels.unwrap(getArguments().getParcelable("representative"));
+        bills = Parcels.unwrap(getArguments().getParcelable("bills"));
+
 
         image = getActivity().findViewById(R.id.representativeImage);
         name = getActivity().findViewById(R.id.representativeName);
@@ -91,8 +95,7 @@ public class RepresentativeFragment extends Fragment {
 
         final FragmentManager fragmentManager = getChildFragmentManager();
         bottomNavigationView = getActivity().findViewById(R.id.votingHistoryNavigation);
-        final Fragment gunVotingHistory = new GunVotingHistoryFragment();
-        final Fragment taxesVotingHistory = new TaxesVotingHistoryFragment();
+        final Fragment votingHistory = new VotingHistoryFragment();
 
 
         //set up bottom navigation
@@ -100,24 +103,24 @@ public class RepresentativeFragment extends Fragment {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 Fragment fragment;
+                Bundle bundle = new Bundle();
                 switch (menuItem.getItemId()) {
                     case R.id.climateControlIcon:
-                        fragment = gunVotingHistory;
-                        break;
-                    case R.id.taxesIcon:
-                        fragment = taxesVotingHistory;
+                        fragment = votingHistory;
+                        bundle.putParcelable("bills", Parcels.wrap(bills.get("guns")));
+                        bundle.putParcelable("rep", Parcels.wrap(representative));
                         break;
                     default:
-                        fragment = gunVotingHistory;
+                        fragment = votingHistory;
+                        bundle.putParcelable("bills", Parcels.wrap(bills.get("guns")));
+                        bundle.putParcelable("rep", Parcels.wrap(representative));
                         break;
                 }
-//                //pass user data with fragment
-//                Bundle bundle = new Bundle();
-//                bundle.putParcelable("user", Parcels.wrap(user));
-//                fragment.setArguments(bundle);
+                //pass user data with fragment
+                fragment.setArguments(bundle);
 
                 //set fragment
-                fragmentManager.beginTransaction().replace(R.id.frameLayoutContainer, fragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.votingHistoryLayoutContainer, fragment).commit();
                 return true;
             }
         });

@@ -64,7 +64,7 @@ public class CandidatesListFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("candidate", Parcels.wrap(candidate));
                 fragment.setArguments(bundle);
-                fragmentManager.beginTransaction().replace(R.id.frameLayoutContainer, fragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.layoutContainer, fragment).commit();
             }
         };
 

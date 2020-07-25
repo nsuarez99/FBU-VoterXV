@@ -8,6 +8,9 @@ public class Representative extends Politician{
     public static final String TAG = "Representative";
     private String committee = "N/A";
     private String years = "N/A";
+    private String state;
+    private String dw_nominate;
+    private String cook_pvi;
 
     public Representative(){}
 
@@ -19,6 +22,14 @@ public class Representative extends Politician{
         return years;
     }
 
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
     public void setYears(String years) {
         this.years = years;
     }
@@ -27,4 +38,34 @@ public class Representative extends Politician{
         this.committee = committee;
     }
 
+    public String getDw_nominate() {
+        return dw_nominate;
+    }
+
+    public void setDw_nominate(String dw_nominate) {
+        this.dw_nominate = dw_nominate;
+    }
+
+    public String getCook_pvi() {
+        return cook_pvi;
+    }
+
+    public void setCook_pvi(String cook_pvi) {
+        this.cook_pvi = cook_pvi;
+    }
+
+    @Override
+    public boolean equals(Object object){
+        if (object instanceof Representative){
+            return sameValue((Representative) object);
+        }
+        else{
+            return false;
+        }
+    }
+
+    //has the same value if name, state, and office are the same
+    public boolean sameValue(Representative other){
+        return other.getName().equals(name) &&  other.getState().equals(state) && other.office == office;
+    }
 }

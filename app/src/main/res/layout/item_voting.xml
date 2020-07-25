@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+
+    <ImageView
+        android:id="@+id/billCheckbox"
+        android:layout_width="68dp"
+        android:layout_height="58dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="6dp"
+        tools:srcCompat="@android:drawable/checkbox_on_background" />
+
+    <TextView
+        android:id="@+id/billTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/billCheckbox"
+        android:layout_marginBottom="4dp"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="11dp"
+        android:maxLines="1"
+        tools:text="George Floyd Justice in Policing Act of 2020" />
+
+    <TextView
+        android:id="@+id/billDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/billSummary"
+        android:layout_below="@id/billTitle"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/billCheckbox"
+        android:gravity="end"
+        android:textSize="12dp"
+        tools:text="07/04/2020" />
+
+    <TextView
+        android:id="@+id/billVotingRecord"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/billTitle"
+        android:layout_toStartOf="@+id/billDate"
+        android:layout_toEndOf="@+id/billCheckbox"
+        android:layout_alignBottom="@+id/billCheckbox"
+        android:textSize="14dp"
+        tools:text="222-231 (D: 200, R: 20, I: 2)"/>
+
+    <TextView
+        android:id="@+id/billSummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/billCheckbox"
+        android:layout_marginTop="4dp"
+        android:textSize="12dp"
+        tools:text="To hold law enforcement accountable for misconduct in court, improve transparency through data collection, and reform police training and policies." />
+
+</RelativeLayout>

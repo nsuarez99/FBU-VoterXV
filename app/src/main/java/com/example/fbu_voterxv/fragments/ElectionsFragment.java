@@ -9,20 +9,17 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.fbu_voterxv.R;
 import com.example.fbu_voterxv.adapters.ElectionAdapter;
-import com.example.fbu_voterxv.models.Candidate;
 import com.example.fbu_voterxv.models.Election;
 import com.example.fbu_voterxv.models.User;
 
 import org.parceler.Parcels;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ElectionsFragment extends Fragment {
@@ -61,7 +58,7 @@ public class ElectionsFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("election", Parcels.wrap(election));
                 candidatesFragment.setArguments(bundle);
-                fragmentManager.beginTransaction().replace(R.id.frameLayoutContainer, candidatesFragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.layoutContainer, candidatesFragment).commit();
             }
         };
 

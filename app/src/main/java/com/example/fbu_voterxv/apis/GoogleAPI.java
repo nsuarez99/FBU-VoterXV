@@ -12,13 +12,13 @@ import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.fbu_voterxv.BuildConfig;
 import com.example.fbu_voterxv.R;
 import com.example.fbu_voterxv.fragments.OfficialsFragment;
+import com.example.fbu_voterxv.models.Bill;
 import com.example.fbu_voterxv.models.Candidate;
 import com.example.fbu_voterxv.models.Election;
 import com.example.fbu_voterxv.models.MyOfficials;
 import com.example.fbu_voterxv.models.Offices;
 import com.example.fbu_voterxv.models.Representative;
 import com.example.fbu_voterxv.models.User;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.Headers;
 
@@ -53,7 +54,7 @@ public class GoogleAPI {
     public static class OfficialsParse{
 
         //sets myOfficials and district
-        public static void setMyOfficials(final User user, final Fragment officialsFragment, final FragmentTransaction fragmentTransaction, BottomNavigationView bottomNavigationView) {
+        public static void setMyOfficials(final User user, final FragmentTransaction fragmentTransaction, final Map<String, List<Bill>> bills) {
             final String URL = BASE_URL + "representatives";
             AsyncHttpClient client = new AsyncHttpClient();
 
@@ -66,16 +67,17 @@ public class GoogleAPI {
                     JSONObject jsonObject = json.jsonObject;
                     try{
                         parseDistrict(jsonObject, user);
-                        user.setOfficials(parseMyOfficials(jsonObject));
+                        user.setOfficials(parseMyOfficials(jsonObject, user));
                         Log.i(TAG, user.getOfficials().toString());
-                        ProPublicaAPI.OfficialsParse.setRepBasicInfo(user);
+                        ProPublicaAPI.OfficialsBasicParse.setRepBasicInfo(user);
 
                         //reload myofficials page
+                        Fragment fragment = new OfficialsFragment();
                         Bundle bundle = new Bundle();
                         bundle.putParcelable("user", Parcels.wrap(user));
-                        Fragment fragment = new OfficialsFragment();
+                        bundle.putParcelable("bills", Parcels.wrap(bills));
                         fragment.setArguments(bundle);
-                        fragmentTransaction.replace(R.id.frameLayoutContainer, fragment).commit();
+                        fragmentTransaction.replace(R.id.layoutContainer, fragment).commit();
                         Log.i(TAG, "reloaded officials");
                     }
                     catch (JSONException e){
@@ -92,7 +94,7 @@ public class GoogleAPI {
         }
 
         //parse MyOfficials fromJson Object
-        private static MyOfficials parseMyOfficials(JSONObject jsonObject) throws JSONException {
+        private static MyOfficials parseMyOfficials(JSONObject jsonObject, User user) throws JSONException {
             MyOfficials myOfficials = new MyOfficials();
             JSONArray officesArray = jsonObject.getJSONArray("officials");
             for (int i = 0; i < officesArray.length() ; i++) {
@@ -146,14 +148,17 @@ public class GoogleAPI {
                 }
                 else if (i == 2){
                     representative.setOffice(Offices.SENATE);
+                    representative.setState(user.getState());
                     myOfficials.setSeniorSenator(representative);
                 }
                 else if (i == 3){
                     representative.setOffice(Offices.SENATE);
+                    representative.setState(user.getState());
                     myOfficials.setJuniorSenator(representative);
                 }
                 else if (i == 4){
                     representative.setOffice(Offices.HOUSE_OF_REPRESENTATIVES);
+                    representative.setState(user.getState());
                     myOfficials.setCongressman(representative);
                 }
             }

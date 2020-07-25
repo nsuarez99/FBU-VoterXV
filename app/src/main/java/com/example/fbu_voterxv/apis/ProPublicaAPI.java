@@ -7,29 +7,40 @@ import com.codepath.asynchttpclient.RequestHeaders;
 import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.fbu_voterxv.BuildConfig;
+import com.example.fbu_voterxv.models.Bill;
 import com.example.fbu_voterxv.models.MyOfficials;
+import com.example.fbu_voterxv.models.Offices;
 import com.example.fbu_voterxv.models.Representative;
+import com.example.fbu_voterxv.models.RollCall;
 import com.example.fbu_voterxv.models.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import okhttp3.Headers;
 
 public class ProPublicaAPI {
 
     public static final String TAG = "ProPublicaAPI";
-    private static final String BASE_URL = "https://api.propublica.org/congress/v1/members/";
+    private static final String BASE_URL = "https://api.propublica.org/congress/v1/";
     private static final String KEY = BuildConfig.PROPPUBLICA_KEY;
 
 
-    public static class OfficialsParse{
+    public static class OfficialsBasicParse{
 
         //sets senators, congressman years, committees, party
         public static void setRepBasicInfo(final User user) {
@@ -40,7 +51,7 @@ public class ProPublicaAPI {
         private static void setSenatorsInfo(final User user){
             String chamber = "senate";
             String state = user.getState();
-            String arguments = String.format("/%s/%s/current.json", chamber, state);
+            String arguments = String.format("members/%s/%s/current.json", chamber, state);
             final String URL = BASE_URL + arguments;
 
             RequestParams params = new RequestParams();
@@ -75,7 +86,7 @@ public class ProPublicaAPI {
             String chamber = "house";
             String state = user.getState();
 //            String district = user.getDistrict();
-            String arguments = String.format("/%s/%s/current.json", chamber, state);
+            String arguments = String.format("members/%s/%s/current.json", chamber, state);
             final String URL = BASE_URL + arguments;
 
             RequestParams params = new RequestParams();
@@ -188,7 +199,7 @@ public class ProPublicaAPI {
         }
 
         private static void getCommittees(String id, final Representative representative){
-            final String URL = BASE_URL + id + ".json";
+            final String URL = BASE_URL + "members/" + id + ".json";
 
             RequestParams params = new RequestParams();
             RequestHeaders headers = new RequestHeaders();
@@ -244,5 +255,320 @@ public class ProPublicaAPI {
         }
     }
 
+
+    public static class OfficialsVotingParse{
+
+        public static  Map<String, List<Bill>> getBills(Map<String, List<Bill>> bills){
+
+//            Set<String> defenseSubjects = new HashSet<>(Arrays.asList("homeland-security", "law-enforcement-administration-and-funding",
+//                    "law-enforcement-officers", "military-procurement-research-weapons-development", "military-readiness", "terrorism",
+//                    "veterans-education-employment-rehabilitation", "veterans-loans-housing-homeless-programs",
+//                    "veterans-organizations-and-recognition", "veterans-pensions-and-compensation"));
+//            for (String subject: defenseSubjects) {
+//                List<Bill> defenseBills = getSubjectBills(subject);
+//                allBills.put("Defense", defenseBills);
+//            }
+
+            Set<String> gunSubjects = new HashSet<>(Arrays.asList("firearms-and-explosives", "violent-crime"));
+            for (String subject: gunSubjects) {
+                List<Bill> gunBills = new ArrayList<>();
+                getSubjectBills(subject, gunBills);
+                bills.put("guns", gunBills);
+            }
+
+            return bills;
+        }
+
+        private static void getSubjectBills(final String subject, final List<Bill> bills){
+            String arguments = String.format("bills/subjects/%s.json", subject);
+            final String URL = BASE_URL + arguments;
+
+            RequestParams params = new RequestParams();
+            RequestHeaders headers = new RequestHeaders();
+            headers.put("X-API-Key", KEY);
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.get(URL, headers, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Headers headers, JSON json) {
+                    Log.d(TAG, "onSuccess getSubjectBills");
+                    JSONObject jsonObject = json.jsonObject;
+                    try{
+                        JSONArray jsonArray = jsonObject.getJSONArray("results");
+                        parseBills(jsonArray, bills);
+                    }
+                    catch (JSONException e){
+                        Log.e(TAG, "Hit json exception while parcing, error: " + e + "\n Subject: " + subject + "\n" + jsonObject);
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                    Log.d(TAG, String.format("onFailure getSubjectBills: \nstatusCode:%d \nresponse:%s", statusCode, response));
+                }
+            });
+        }
+
+        private static void parseBills(JSONArray jsonArray, List<Bill> bills) throws JSONException {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                if (!jsonObject.getString("last_vote").equals("null")){
+                    Bill bill = new Bill();
+
+                    bill.setSlugID(jsonObject.getString("bill_slug"));
+                    bill.setTitle(jsonObject.getString("short_title"));
+                    bill.setBriefSummary(jsonObject.getString("title"));
+                    bill.setSummary(jsonObject.getString("summary"));
+                    bill.setUrl(jsonObject.getString("congressdotgov_url"));
+                    bill.setSubject(jsonObject.getString("primary_subject"));
+                    bill.setLastAction(parseDate(jsonObject.getString("latest_major_action_date")));
+                    bill.setSponsor(parseSponsor(jsonObject));
+                    bill.setCosponsors(parseCosponsors(jsonObject.getJSONObject("cosponsors_by_party")));
+
+                    String id = jsonObject.getString("bill_id");
+                    int dashIndex = id.indexOf("-");
+                    bill.setCongress(id.substring(dashIndex + 1));
+
+                    bills.add(bill);
+                    getSpecificBill(bill);
+                }
+            }
+        }
+
+        private static Date parseDate(String rawJsonTime){
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = new Date();
+            try{
+                date = dateFormat.parse(rawJsonTime);
+            } catch (ParseException e) {
+                Log.e(TAG, "error parsing date");
+                e.printStackTrace();
+            }
+            return date;
+        }
+
+        private static Map<String, Integer> parseCosponsors(JSONObject jsonObject) throws JSONException {
+            Map<String, Integer> cosponsors = new HashMap<>();
+            Iterator<String> keys = jsonObject.keys();
+            while(keys.hasNext() ) {
+                String sponsorParty = (String)keys.next();
+                int numberOfSponsor = jsonObject.getInt(sponsorParty);
+                cosponsors.put(sponsorParty, numberOfSponsor);
+            }
+            return  cosponsors;
+        }
+
+        private static Representative parseSponsor(JSONObject jsonObject) throws JSONException {
+            Representative representative = new Representative();
+            String name = jsonObject.getString("sponsor_name");
+            String state = jsonObject.getString("sponsor_state");
+            String party = jsonObject.getString("sponsor_party");
+            String title = jsonObject.getString("sponsor_title");
+
+            representative.setName(name);
+            representative.setState(state);
+
+            Offices offices;
+            if (title.equals("Rep.")){
+                offices = Offices.HOUSE_OF_REPRESENTATIVES;
+            }
+            else{
+                offices = Offices.SENATE;
+            }
+            representative.setOffice(offices);
+
+            if (party.equals("D")){
+                representative.setParty("Democrat");
+            }
+            else if(party.equals("R")){
+                representative.setParty("Republican");
+            }
+            else{
+                representative.setParty("Independent");
+            }
+            return representative;
+        }
+
+        private static void getSpecificBill(final Bill bill){
+            String arguments = String.format("%s/bills/%s.json", bill.getCongress(), bill.getSlugID());
+            final String URL = BASE_URL + arguments;
+
+            RequestParams params = new RequestParams();
+            RequestHeaders headers = new RequestHeaders();
+            headers.put("X-API-Key", KEY);
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.get(URL, headers, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Headers headers, JSON json) {
+                    Log.d(TAG, "onSuccess getSpecificBills");
+                    JSONObject jsonObject = json.jsonObject;
+                    try{
+                        JSONArray jsonArray = jsonObject.getJSONArray("results");
+                        parseSpecificBill(jsonArray, bill);
+                    }
+                    catch (JSONException e){
+                        Log.e(TAG, "Hit json exception while parcing, error: " + e);
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                    Log.d(TAG, String.format("onFailure getSpecificBills: \nstatusCode:%d \nresponse:%s", statusCode, response));
+                }
+            });
+        }
+
+        private static void parseSpecificBill(JSONArray jsonArray, Bill bill) throws JSONException {
+            if (jsonArray.length() > 1){
+                Log.e(TAG, "more than one specific bill");
+            }
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+//            //TODO check to see what type null is returned as
+//            bill.setVeto(false);
+//            bill.setHouse_vote(false);
+//            bill.setSenate_vote(false);
+//            String houseVote = jsonObject.getString("house_passage_vote");
+//            String senateVote = jsonObject.getString("senate_passage_vote");
+//            String veto = jsonObject.getString("vetoed");
+//            if (houseVote != "null"){
+//                bill.setHouse_vote(true);
+//            }
+//            if (senateVote != "null"){
+//                bill.setHouse_vote(true);
+//            }
+//            if (veto != "null"){
+//                bill.setHouse_vote(true);
+//            }
+
+
+            JSONArray actions = jsonObject.getJSONArray("votes");
+            parseSpecificBillActions(actions, bill);
+
+
+        }
+
+        private static void parseSpecificBillActions(JSONArray jsonArray, Bill bill) throws JSONException {
+            List<String> votingMotions = new ArrayList<>(Arrays.asList("On Agreeing to the Conference Report", "On the Joint Resolution", "On Passage", "On Passage of the Bill", "On Motion to Suspend the Rules and Pass"));
+            Boolean house = false;
+            Boolean senate = false;
+            for (int i = 0; i < jsonArray.length() ; i++) {
+                JSONObject vote = jsonArray.getJSONObject(i);
+                if (votingMotions.contains(vote.getString("question"))){
+                    String url = vote.getString("api_url");
+                    getRollCall(url, bill);
+
+                    //only get the most recent house and senate vote
+                    if (vote.getString("chamber").equals("House")){
+                        house = true;
+                    }
+                    else{
+                        senate = true;
+                    }
+                }
+                if (house && senate){
+                    break;
+                }
+
+            }
+        }
+
+        private static void getRollCall(String url, final Bill bill){
+            RequestParams params = new RequestParams();
+            RequestHeaders headers = new RequestHeaders();
+            headers.put("X-API-Key", KEY);
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.get(url, headers, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Headers headers, JSON json) {
+                    Log.d(TAG, "onSuccess getRollCall");
+                    JSONObject jsonObject = json.jsonObject;
+                    try{
+                        JSONObject votes = jsonObject.getJSONObject("results").getJSONObject("votes").getJSONObject("vote");
+                        parseRollCall(votes, bill);
+                    }
+                    catch (JSONException e){
+                        Log.e(TAG, "Hit json exception while parcing, error: " + e);
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                    Log.d(TAG, String.format("onFailure getRollCall: \nstatusCode:%d \nresponse:%s", statusCode, response));
+                }
+            });
+
+        }
+
+        private static void parseRollCall(JSONObject jsonObject, Bill bill) throws JSONException {
+            RollCall rollCall = new RollCall();
+
+            //set roll call for bill
+            String chamber = jsonObject.getString("chamber");
+            Offices office;
+            if (chamber.equals("House")){
+                office = Offices.HOUSE_OF_REPRESENTATIVES;
+                bill.setHouseRollCall(rollCall);
+            }
+            else{
+                office = Offices.SENATE;
+                bill.setSenateRollCall(rollCall);
+
+            }
+
+            //set date
+            rollCall.setDate(parseDate(jsonObject.getString("date")));
+
+            //set voting party breakdowns
+            List<String> partyList = new ArrayList<>(Arrays.asList("democratic", "republican", "independent", "total"));
+            for (String party: partyList) {
+                Map<String, Integer> partyBreakdown = new HashMap<>();
+                JSONObject partyJson = jsonObject.getJSONObject(party);
+                Iterator<String> keys = partyJson.keys();
+                while(keys.hasNext() ) {
+                    String typeOfVote = (String)keys.next();
+                    if (typeOfVote.equals("majority_position")){
+                        continue;
+                    }
+                    else{
+                        int numberOfVotes = partyJson.getInt(typeOfVote);
+                        partyBreakdown.put(typeOfVote, numberOfVotes);
+                    }
+                }
+                switch (party){
+                    case "democratic":
+                        rollCall.setDemocratBreakdown(partyBreakdown);
+                        break;
+                    case "republican":
+                        rollCall.setRepublicanBreakdown(partyBreakdown);
+                        break;
+                    case "independent":
+                        rollCall.setIndependentBreakdown(partyBreakdown);
+                        break;
+                    case "total":
+                        rollCall.setTotalBreakdown(partyBreakdown);
+                        break;
+                }
+            }
+
+            //set voting positions of all representatives
+            Map<Representative, String> votingPositions = new HashMap<>();
+            rollCall.setVotes(votingPositions);
+            JSONArray votes = jsonObject.getJSONArray("positions");
+            for (int i = 0; i < votes.length(); i++) {
+                JSONObject vote = votes.getJSONObject(i);
+                Representative representative = new Representative();
+                representative.setName(vote.getString("name"));
+                representative.setParty(vote.getString("party"));
+                representative.setState(vote.getString("state"));
+                representative.setOffice(office);
+                rollCall.addVote(representative, vote.getString("vote_position"));
+            }
+
+        }
+
+    }
 
 }

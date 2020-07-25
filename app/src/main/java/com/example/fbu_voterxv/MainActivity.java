@@ -15,15 +15,21 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_voterxv.apis.GoogleAPI;
+import com.example.fbu_voterxv.apis.ProPublicaAPI;
 import com.example.fbu_voterxv.fragments.ElectionsFragment;
 import com.example.fbu_voterxv.fragments.OfficialsFragment;
 import com.example.fbu_voterxv.fragments.ProfileFragment;
 import com.example.fbu_voterxv.fragments.SettingsFragment;
+import com.example.fbu_voterxv.models.Bill;
 import com.example.fbu_voterxv.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
@@ -34,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView profileImage;
     private BottomNavigationView bottomNavigationView;
     private User user;
+    private Map<String, List<Bill>> bills;
     private final Fragment officialsFragment = new OfficialsFragment();
     private final Fragment electionsFragment = new ElectionsFragment();
     private final Fragment settingsFragment = new SettingsFragment();
@@ -57,15 +64,21 @@ public class MainActivity extends AppCompatActivity {
                 Fragment fragment;
                 if (item.getItemId() == R.id.settings) {
                     fragment = settingsFragment;
-                    fragmentManager.beginTransaction().replace(R.id.frameLayoutContainer, fragment).commit();
+                    fragmentManager.beginTransaction().replace(R.id.layoutContainer, fragment).commit();
                 }
                 return true;
             }
         });
 
+        //get bills data
+        bills = new HashMap<>();
+        ProPublicaAPI.OfficialsVotingParse.getBills(bills);
+
         //Create my user object and populate with parseUser data
         user = new User();
         populateUser();
+
+
 
         //checks to see if it comes from signup page to send them to the profile page
         if(getIntent().getBooleanExtra("signup", false)){
@@ -74,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             bundle.putParcelable("user", Parcels.wrap(user));
             Fragment fragment = profileFragment;
             fragment.setArguments(bundle);
-            fragmentManager.beginTransaction().replace(R.id.frameLayoutContainer, profileFragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.layoutContainer, profileFragment).commit();
         }
 
         //set up bottom navigation
@@ -96,10 +109,11 @@ public class MainActivity extends AppCompatActivity {
                 //pass user data with fragment
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("user", Parcels.wrap(user));
+                bundle.putParcelable("bills", Parcels.wrap(bills));
                 fragment.setArguments(bundle);
 
                 //set fragment
-                fragmentManager.beginTransaction().replace(R.id.frameLayoutContainer, fragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.layoutContainer, fragment).commit();
                 return true;
             }
         });
@@ -114,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 bundle.putParcelable("user", Parcels.wrap(user));
                 Fragment fragment = profileFragment;
                 fragment.setArguments(bundle);
-                fragmentManager.beginTransaction().replace(R.id.frameLayoutContainer, fragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.layoutContainer, fragment).commit();
             }
         });
 
@@ -138,8 +152,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //get user representatives and election data
-        GoogleAPI.OfficialsParse.setMyOfficials(user, officialsFragment, fragmentManager.beginTransaction(), bottomNavigationView);
-        GoogleAPI.ElectionParse.setElections(user);
+        GoogleAPI.OfficialsParse.setMyOfficials(user, fragmentManager.beginTransaction(), bills);
+//        GoogleAPI.ElectionParse.setElections(user);
 
     }
 
