@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class VotingHistoryFragment extends Fragment {
 
-    public static final String TAG = "RepresentativeFragment";
+    public static final String TAG = "VotingHistoryFragment";
     private List<Bill> bills;
     private Representative representative;
     private RecyclerView votingRecyclerView;
@@ -46,12 +46,14 @@ public class VotingHistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Log.i(TAG, "createview");
         return inflater.inflate(R.layout.fragment_voting_history, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.i(TAG, "view created");
 
         //get bill data
         bills = Parcels.unwrap(getArguments().getParcelable("bills"));

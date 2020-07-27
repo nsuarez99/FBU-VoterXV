@@ -95,7 +95,6 @@ public class RepresentativeFragment extends Fragment {
 
         final FragmentManager fragmentManager = getChildFragmentManager();
         bottomNavigationView = getActivity().findViewById(R.id.votingHistoryNavigation);
-        final Fragment votingHistory = new VotingHistoryFragment();
 
 
         //set up bottom navigation
@@ -105,18 +104,29 @@ public class RepresentativeFragment extends Fragment {
                 Fragment fragment;
                 Bundle bundle = new Bundle();
                 switch (menuItem.getItemId()) {
-                    case R.id.climateControlIcon:
-                        fragment = votingHistory;
-                        bundle.putParcelable("bills", Parcels.wrap(bills.get("guns")));
-                        bundle.putParcelable("rep", Parcels.wrap(representative));
+                    case R.id.defenseIcon:
+                        fragment = new VotingHistoryFragment();
+                        bundle.putParcelable("bills", Parcels.wrap(bills.get("defense")));
+                        break;
+                    case R.id.healthIcon:
+                        fragment = new VotingHistoryFragment();
+                        bundle.putParcelable("bills", Parcels.wrap(bills.get("health")));
+                        break;
+                    case R.id.educationIcon:
+                        fragment = new VotingHistoryFragment();
+                        bundle.putParcelable("bills", Parcels.wrap(bills.get("education")));
+                        break;
+                    case R.id.socialIcon:
+                        fragment = new VotingHistoryFragment();
+                        bundle.putParcelable("bills", Parcels.wrap(bills.get("social")));
                         break;
                     default:
-                        fragment = votingHistory;
-                        bundle.putParcelable("bills", Parcels.wrap(bills.get("guns")));
-                        bundle.putParcelable("rep", Parcels.wrap(representative));
+                        fragment = new VotingHistoryFragment();
+                        bundle.putParcelable("bills", Parcels.wrap(bills.get("economy")));
                         break;
                 }
                 //pass user data with fragment
+                bundle.putParcelable("rep", Parcels.wrap(representative));
                 fragment.setArguments(bundle);
 
                 //set fragment
@@ -124,6 +134,6 @@ public class RepresentativeFragment extends Fragment {
                 return true;
             }
         });
-        bottomNavigationView.setSelectedItemId(R.id.climateControlIcon);
+        bottomNavigationView.setSelectedItemId(R.id.economyIcon);
     }
 }

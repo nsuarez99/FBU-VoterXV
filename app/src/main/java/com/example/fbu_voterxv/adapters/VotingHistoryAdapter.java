@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -75,6 +76,7 @@ public class VotingHistoryAdapter extends RecyclerView.Adapter<VotingHistoryAdap
         TextView billDate;
         TextView billSummary;
         TextView billVotingRecord;
+        RelativeLayout billLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -83,6 +85,7 @@ public class VotingHistoryAdapter extends RecyclerView.Adapter<VotingHistoryAdap
             billDate = itemView.findViewById(R.id.billDate);
             billSummary = itemView.findViewById(R.id.billSummary);
             billVotingRecord = itemView.findViewById(R.id.billVotingRecord);
+            billLayout = itemView.findViewById(R.id.bill);
         }
 
         public void bind(Bill bill) {
@@ -95,11 +98,13 @@ public class VotingHistoryAdapter extends RecyclerView.Adapter<VotingHistoryAdap
                 rollCall = bill.getHouseRollCall();
             }
             else{
+                billLayout.setVisibility(View.GONE);
                 return;
             }
 
             //if there is no vote in that chamber for that bill
             if (rollCall == null){
+                billLayout.setVisibility(View.GONE);
                 return;
             }
 

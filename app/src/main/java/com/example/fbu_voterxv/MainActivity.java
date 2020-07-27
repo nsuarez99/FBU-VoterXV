@@ -56,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         setSupportActionBar(toolbar);
+        bills = new HashMap<>();
+        user = new User();
+
 
         //set toolbar composing and setting action
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -70,13 +73,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //get bills data
-        bills = new HashMap<>();
-        ProPublicaAPI.OfficialsVotingParse.getBills(bills);
 
         //Create my user object and populate with parseUser data
-        user = new User();
         populateUser();
+
+        //get bills data
+        ProPublicaAPI.OfficialsVotingParse.getBills(bills);
 
 
 

@@ -65,7 +65,31 @@ public class Representative extends Politician{
     }
 
     //has the same value if name, state, and office are the same
-    public boolean sameValue(Representative other){
-        return other.getName().equals(name) &&  other.getState().equals(state) && other.office == office;
+    private boolean sameValue(Representative other){
+        return other.nameEquals(other.name) &&  other.getState().equals(state) && other.office == office;
+    }
+
+    public boolean nameEquals(String otherName){
+        String[] repNameArray = name.split("\\s+");
+        String[] otherNameArray = otherName.split("\\s+");
+
+        //just in case someone has a double last name
+        if (repNameArray.length >= 3){
+            repNameArray[1] = "";
+        }
+        if (otherNameArray.length >= 3){
+            otherNameArray[1] = "";
+        }
+        String repName = arrayToString(repNameArray);
+        otherName = arrayToString(otherNameArray);
+        return repName.equals(otherName);
+    }
+
+    private String arrayToString(String[] array){
+        String word = "";
+        for (int i = 0; i < array.length ; i++) {
+            word += array[i];
+        }
+        return word;
     }
 }
