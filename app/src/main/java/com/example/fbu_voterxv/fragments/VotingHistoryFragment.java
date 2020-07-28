@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,21 +12,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.fbu_voterxv.R;
-import com.example.fbu_voterxv.adapters.ElectionAdapter;
 import com.example.fbu_voterxv.adapters.VotingHistoryAdapter;
 import com.example.fbu_voterxv.models.Bill;
-import com.example.fbu_voterxv.models.Election;
+import com.example.fbu_voterxv.models.Offices;
 import com.example.fbu_voterxv.models.Representative;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.fbu_voterxv.models.RollCall;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class VotingHistoryFragment extends Fragment {
 
@@ -55,10 +54,9 @@ public class VotingHistoryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.i(TAG, "view created");
 
-        //get bill data
-        bills = Parcels.unwrap(getArguments().getParcelable("bills"));
         representative = Parcels.unwrap(getArguments().getParcelable("rep"));
-
+        Set<Bill> billsSet = (Set<Bill>) Parcels.unwrap(getArguments().getParcelable("bills"));
+        bills = getRepresentativeBills(new ArrayList<Bill>(billsSet));
 
         votingRecyclerView = view.findViewById(R.id.votingHistoryRecyclerView);
 
@@ -67,5 +65,32 @@ public class VotingHistoryFragment extends Fragment {
         votingRecyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         votingRecyclerView.setLayoutManager(linearLayoutManager);
+    }
+
+    private List<Bill> getRepresentativeBills(List<Bill> bills){
+        List<Bill> newList = new ArrayList<>();
+        for (Bill bill: bills) {
+            RollCall rollCall;
+            if (representative.getOffice() == Offices.SENATE) {
+                rollCall = bill.getSenateRollCall();
+            } else if (representative.getOffice() == Offices.HOUSE_OF_REPRESENTATIVES) {
+                rollCall = bill.getHouseRollCall();
+            } else {
+                return newList;
+            }
+
+            //chamber has not voted on this bill
+            if (rollCall == null){
+                continue;
+            }
+
+            Map<Representative, String> votes = rollCall.getVotes();
+            for (Representative rep : votes.keySet()) {
+                if (rep.equals(representative)) {
+                    newList.add(bill);
+                }
+            }
+        }
+        return newList;
     }
 }

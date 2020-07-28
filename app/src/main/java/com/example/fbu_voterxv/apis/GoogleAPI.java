@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import okhttp3.Headers;
 
@@ -54,7 +55,7 @@ public class GoogleAPI {
     public static class OfficialsParse{
 
         //sets myOfficials and district
-        public static void setMyOfficials(final User user, final FragmentTransaction fragmentTransaction, final Map<String, List<Bill>> bills) {
+        public static void setMyOfficials(final User user, final FragmentTransaction fragmentTransaction, final Map<String, Set<Bill>> bills) {
             final String URL = BASE_URL + "representatives";
             AsyncHttpClient client = new AsyncHttpClient();
 
@@ -181,7 +182,7 @@ public class GoogleAPI {
 
     public static class ElectionParse{
 
-        //TODO check president tag
+        //TODO checkmark president tag
         private static final String ELECTION_CONGRESSMAN = "REPRESENTATIVE IN CONGRESS";
         private static final String ELECTION_SENATOR = "UNITED STATES SENATOR";
         private static final String ELECTION_PRESIDENT = "UNTIED STATES PRESIDENT";

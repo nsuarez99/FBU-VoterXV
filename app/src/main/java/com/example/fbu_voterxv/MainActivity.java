@@ -30,6 +30,7 @@ import org.parceler.Parcels;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView profileImage;
     private BottomNavigationView bottomNavigationView;
     private User user;
-    private Map<String, List<Bill>> bills;
+    private Map<String, Set<Bill>> bills;
     private final Fragment officialsFragment = new OfficialsFragment();
     private final Fragment electionsFragment = new ElectionsFragment();
     private final Fragment settingsFragment = new SettingsFragment();

@@ -234,14 +234,14 @@ public class ProPublicaAPI {
 
     public static class OfficialsVotingParse{
 
-        public static  Map<String, List<Bill>> getBills(Map<String, List<Bill>> bills){
-            List<Bill> defenseBills = new ArrayList<>();
-            List<Bill> gunBills = new ArrayList<>();
-            List<Bill> economyBills = new ArrayList<>();
-            List<Bill> healthBills = new ArrayList<>();
-            List<Bill> socialBills = new ArrayList<>();
-            List<Bill> educationBills = new ArrayList<>();
-            List<Bill> immigrationBills = new ArrayList<>();
+        public static  Map<String, Set<Bill>> getBills(Map<String, Set<Bill>> bills){
+            Set<Bill> defenseBills = new HashSet<>();
+            Set<Bill> gunBills = new HashSet<>();
+            Set<Bill> economyBills = new HashSet<>();
+            Set<Bill> healthBills = new HashSet<>();
+            Set<Bill> socialBills = new HashSet<>();
+            Set<Bill> educationBills = new HashSet<>();
+            Set<Bill> immigrationBills = new HashSet<>();
 
 
             bills.put("defense", defenseBills);
@@ -270,9 +270,9 @@ public class ProPublicaAPI {
                 getSubjectBills(subject, gunBills);
             }
 //
-            Set<String> economySubject = new HashSet<>(Arrays.asList("capital-gains-tax,economic-development","employment-taxes","free-trade-and-trade-barriers",
+            Set<String> economySubject = new HashSet<>(Arrays.asList("capital-gains-tax","economic-development","employment-taxes","free-trade-and-trade-barriers",
                     "general-taxation-matters","income-tax-credits","income-tax-deductions","income-tax-deferral","income-tax-exclusion","income-tax-rates",
-                    "infrastructure-development","normal-trade-relations","most-favored-nation-treatment","property-tax","social-security-and-elderly-assistance",
+                    "infrastructure-development","normal-trade-relations-most-favored-nation-treatment","property-tax","social-security-and-elderly-assistance",
                     "tax-reform-and-tax-simplification","trade-agreements-and-negotiations","trade-restrictions","transfer-and-inheritance-taxes",
                     "urban-and-suburban-affairs-and-development","wages-and-earnings","womens-employment"));
             for (String subject: economySubject) {
@@ -287,9 +287,8 @@ public class ProPublicaAPI {
             }
 
             Set<String> socialSubjects = new HashSet<>(Arrays.asList("criminal-procedure-and-sentencing","due-process-and-equal-protection",
-                    "employment-discrimination-and-employee-rights","first-amendment-rights","hate-crimes","low-and-moderate-income-housing",
-                    "minority-and-disadvantaged-business","minority-education","minority-employment","minority-health","public-housing",
-                    "racial-and-ethnic-relations","right-of-privacy","sex-gender-sexual-orientation-discrimination","voting-rights","womens-rights"));
+                    "employment-discrimination-and-employee-rights","first-amendment-rights","hate-crimes","minority-education","minority-employment",
+                    "minority-health","public-housing", "racial-and-ethnic-relations","right-of-privacy","sex-gender-sexual-orientation-discrimination","voting-rights","womens-rights"));
             for (String subject: socialSubjects) {
                 getSubjectBills(subject, socialBills);
             }
@@ -301,20 +300,10 @@ public class ProPublicaAPI {
                 getSubjectBills(subject, educationBills);
             }
 
-//            Set<String> environmentalSubjects = new HashSet<>(Arrays.asList("climate-change-and-greenhouse-gases","environmental-assessment-monitoring-research",
-//                    "environmental-regulatory-procedures","environmental-technology"));
-//            for (String subject: environmentalSubjects) {
-//                List<Bill> environmentalBills = new ArrayList<>();
-//                getSubjectBills(subject, environmentalBills);
-//                bills.put("environment", environmentalBills);
-//
-//            }
-
-
             return bills;
         }
 
-        private static void getSubjectBills(final String subject, final List<Bill> bills){
+        private static void getSubjectBills(final String subject, final Set<Bill> bills){
             String arguments = String.format("bills/subjects/%s.json", subject);
             final String URL = BASE_URL + arguments;
 
@@ -344,7 +333,7 @@ public class ProPublicaAPI {
             });
         }
 
-        private static void parseBills(JSONArray jsonArray, List<Bill> bills) throws JSONException {
+        private static void parseBills(JSONArray jsonArray, Set<Bill> bills) throws JSONException {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 if (!jsonObject.getString("last_vote").equals("null")){
@@ -460,12 +449,7 @@ public class ProPublicaAPI {
             }
             JSONObject jsonObject = jsonArray.getJSONObject(0);
 
-//            //TODO check to see what type null is returned as
-//            bill.setVeto(false);
-//            bill.setHouse_vote(false);
-//            bill.setSenate_vote(false);
-//            String houseVote = jsonObject.getString("house_passage_vote");
-//            String senateVote = jsonObject.getString("senate_passage_vote");
+            //TODO implement veto
 //            String veto = jsonObject.getString("vetoed");
 //            if (houseVote != "null"){
 //                bill.setHouse_vote(true);
@@ -492,14 +476,16 @@ public class ProPublicaAPI {
                 JSONObject vote = jsonArray.getJSONObject(i);
                 if (votingMotions.contains(vote.getString("question"))){
                     String url = vote.getString("api_url");
-                    getRollCall(url, bill);
 
                     //only get the most recent house and senate vote
-                    if (vote.getString("chamber").equals("House")){
+                    if (vote.getString("chamber").equals("House") && !house){
                         house = true;
+                        getRollCall(url, bill);
+
                     }
-                    else{
+                    else if (vote.getString("chamber").equals("Senate") && !senate){
                         senate = true;
+                        getRollCall(url, bill);
                     }
                 }
                 if (house && senate){

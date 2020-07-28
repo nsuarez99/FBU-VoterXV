@@ -102,4 +102,39 @@ public class Politician {
     public void setTwitter(String twitter) {
         this.twitter = twitter;
     }
+
+    @Override
+    public boolean equals(Object object){
+        if (object instanceof Politician){
+            return ((Politician) object).nameEquals(name) && ((Politician) object).office == office;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public boolean nameEquals(String otherName){
+        String[] repNameArray = name.split("\\s+");
+        String[] otherNameArray = otherName.split("\\s+");
+
+        //just in case someone has a double last name
+        if (repNameArray.length >= 3){
+            repNameArray[1] = "";
+        }
+        if (otherNameArray.length >= 3){
+            otherNameArray[1] = "";
+        }
+        String repName = arrayToString(repNameArray);
+        otherName = arrayToString(otherNameArray);
+        return repName.equals(otherName);
+    }
+
+    private String arrayToString(String[] array){
+        String word = "";
+        for (int i = 0; i < array.length ; i++) {
+            word += array[i];
+        }
+        return word;
+    }
+
 }

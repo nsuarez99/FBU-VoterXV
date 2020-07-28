@@ -5,27 +5,27 @@
 
     <item
         android:id="@+id/defenseIcon"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/military"
         android:title="Defense"
         app:showAsAction="always" />
     <item
         android:id="@+id/economyIcon"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/money"
         android:title="Economy"
         app:showAsAction="always" />
     <item
         android:id="@+id/educationIcon"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/education"
         android:title="Education"
         app:showAsAction="always" />
     <item
         android:id="@+id/healthIcon"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/health"
         android:title="Health Care"
         app:showAsAction="always" />
     <item
         android:id="@+id/socialIcon"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/social"
         android:title="Social Justice"
         app:showAsAction="always" />
 

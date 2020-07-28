@@ -22,8 +22,6 @@ public class Bill{
     private String subject;
     private Date lastAction;
     private String url;
-    private Boolean house_vote;
-    private Boolean senate_vote;
     private Boolean veto;
     private RollCall houseRollCall;
     private RollCall senateRollCall;
@@ -70,14 +68,6 @@ public class Bill{
         return url;
     }
 
-    public Boolean getHouse_vote() {
-        return house_vote;
-    }
-
-    public Boolean getSenate_vote() {
-        return senate_vote;
-    }
-
     public Boolean getVeto() {
         return veto;
     }
@@ -96,14 +86,6 @@ public class Bill{
 
     public void setSenateRollCall(RollCall senateRollCall) {
         this.senateRollCall = senateRollCall;
-    }
-
-    public void setHouse_vote(Boolean house_vote) {
-        this.house_vote = house_vote;
-    }
-
-    public void setSenate_vote(Boolean senate_vote) {
-        this.senate_vote = senate_vote;
     }
 
     public void setVeto(Boolean veto) {
@@ -148,5 +130,20 @@ public class Bill{
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    @Override
+    public boolean equals(Object object){
+        if (object instanceof Bill){
+            return ((Bill) object).slugID.equals(slugID);
+        }
+        else{
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return slugID.hashCode();
     }
 }

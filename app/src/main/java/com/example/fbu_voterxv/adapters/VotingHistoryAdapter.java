@@ -111,17 +111,22 @@ public class VotingHistoryAdapter extends RecyclerView.Adapter<VotingHistoryAdap
             //get vote of representative and if not in congress then skips bill
             String vote = getRepresentativeVote(rollCall);
             if (vote.equals("Yes")){
-                Glide.with(context).load(android.R.drawable.checkbox_on_background).into(votingCheckbox);
+                Glide.with(context).load(R.drawable.checkmark).into(votingCheckbox);
             }
             else if (vote.equals("No")){
                 Glide.with(context).load(android.R.drawable.ic_delete).into(votingCheckbox);
             }
             else{
-                return;
+                Glide.with(context).load(R.drawable.absent).into(votingCheckbox);
             }
 
-            billTitle.setText(bill.getTitle());
+            //set the total vote record
+            billVotingRecord.setText(String.format("%d - %d (D: %d, R: %d, I:%d)", rollCall.getTotalBreakdown().get("yes"), rollCall.getTotalBreakdown().get("no"),
+                    rollCall.getDemocratBreakdown().get("yes"), rollCall.getRepublicanBreakdown().get("yes"), rollCall.getIndependentBreakdown().get("yes")));
+
+
             billSummary.setText(bill.getBriefSummary());
+            billTitle.setText(bill.getTitle());
 
             SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
             String date = formatter.format(rollCall.getDate());

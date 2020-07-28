@@ -15,7 +15,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="6dp"
-        tools:srcCompat="@android:drawable/checkbox_on_background" />
+        android:scaleType="fitXY"
+        tools:srcCompat="@drawable/absent" />
 
     <TextView
         android:id="@+id/billTitle"
@@ -23,10 +24,10 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/billCheckbox"
         android:layout_marginBottom="4dp"
-        android:autoSizeTextType="uniform"
-        android:autoSizeMinTextSize="11dp"
-        android:maxLines="1"
-        tools:text="George Floyd Justice in Policing Act of 2020" />
+        android:textSize="14dp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        tools:text="George Floyd Justice in Policing Act of 2020 in the United States" />
 
     <TextView
         android:id="@+id/billDate"
