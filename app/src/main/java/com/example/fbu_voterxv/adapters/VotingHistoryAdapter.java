@@ -1,6 +1,7 @@
 package com.example.fbu_voterxv.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,19 +25,22 @@ import java.util.Map;
 
 public class VotingHistoryAdapter extends RecyclerView.Adapter<VotingHistoryAdapter.ViewHolder> {
 
+    public static final String TAG = "VotingHistoryFragment";
     private Context context;
     private List<Bill> bills;
     private OnClickListener onClickListener;
     private Representative representative;
+    private Map<Bill, String> votes;
 
     public interface OnClickListener{
         void onClick(int position);
     }
 
-    public VotingHistoryAdapter(Context context, List<Bill> bills, Representative representative) {
+    public VotingHistoryAdapter(Context context, List<Bill> bills, Representative representative, Map<Bill, String> votes) {
         this.context = context;
         this.bills = bills;
         this.representative = representative;
+        this.votes = votes;
     }
 
     @NonNull
@@ -102,14 +106,8 @@ public class VotingHistoryAdapter extends RecyclerView.Adapter<VotingHistoryAdap
                 return;
             }
 
-            //if there is no vote in that chamber for that bill
-            if (rollCall == null){
-                billLayout.setVisibility(View.GONE);
-                return;
-            }
-
             //get vote of representative and if not in congress then skips bill
-            String vote = getRepresentativeVote(rollCall);
+            String vote = votes.get(bill);
             if (vote.equals("Yes")){
                 Glide.with(context).load(R.drawable.checkmark).into(votingCheckbox);
             }
@@ -120,9 +118,13 @@ public class VotingHistoryAdapter extends RecyclerView.Adapter<VotingHistoryAdap
                 Glide.with(context).load(R.drawable.absent).into(votingCheckbox);
             }
 
+            Log.i(TAG, bill.getCosponsors().toString());
+            Log.i(TAG, bill.getSponsor().getParty());
+
+
             //set the total vote record
-            billVotingRecord.setText(String.format("%d - %d (D: %d, R: %d, I:%d)", rollCall.getTotalBreakdown().get("yes"), rollCall.getTotalBreakdown().get("no"),
-                    rollCall.getDemocratBreakdown().get("yes"), rollCall.getRepublicanBreakdown().get("yes"), rollCall.getIndependentBreakdown().get("yes")));
+            billVotingRecord.setText(String.format("%d - %d (D: %d, R: %d, I:%d) %s", rollCall.getTotalBreakdown().get("yes"), rollCall.getTotalBreakdown().get("no"),
+                    rollCall.getDemocratBreakdown().get("yes"), rollCall.getRepublicanBreakdown().get("yes"), rollCall.getIndependentBreakdown().get("yes"), rollCall.getResult()));
 
 
             billSummary.setText(bill.getBriefSummary());
@@ -133,16 +135,6 @@ public class VotingHistoryAdapter extends RecyclerView.Adapter<VotingHistoryAdap
             billDate.setText(date);
 
 //            setListeners();
-        }
-
-        private String getRepresentativeVote(RollCall rollCall){
-            Map<Representative, String> votes = rollCall.getVotes();
-            for (Representative rep : votes.keySet()) {
-                if (rep.equals(representative)){
-                    return votes.get(rep);
-                }
-            }
-            return "N/A";
         }
 
 //        //set on click listeners

@@ -64,7 +64,8 @@ public class Representative extends Politician{
         }
     }
 
-    protected boolean sameValue(Representative other){
+    private boolean sameValue(Representative other){
         return other.nameEquals(name) &&  other.getState().equals(state) && other.office == office;
     }
+
 }

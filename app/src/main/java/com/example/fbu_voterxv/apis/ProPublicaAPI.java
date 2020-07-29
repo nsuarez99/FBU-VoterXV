@@ -236,78 +236,76 @@ public class ProPublicaAPI {
 
         public static  Map<String, Set<Bill>> getBills(Map<String, Set<Bill>> bills){
             Set<Bill> defenseBills = new HashSet<>();
-            Set<Bill> gunBills = new HashSet<>();
             Set<Bill> economyBills = new HashSet<>();
             Set<Bill> healthBills = new HashSet<>();
             Set<Bill> socialBills = new HashSet<>();
             Set<Bill> educationBills = new HashSet<>();
-            Set<Bill> immigrationBills = new HashSet<>();
 
 
             bills.put("defense", defenseBills);
-            bills.put("defense", gunBills);
             bills.put("economy", economyBills);
             bills.put("health", healthBills);
             bills.put("social", socialBills);
             bills.put("education", educationBills);
-            bills.put("defense", immigrationBills);
+
 
             Set<String> defenseSubjects = new HashSet<>(Arrays.asList("homeland-security", "law-enforcement-administration-and-funding",
                     "law-enforcement-officers", "military-procurement-research-weapons-development", "military-readiness", "terrorism",
                     "veterans-education-employment-rehabilitation", "veterans-loans-housing-homeless-programs",
                     "veterans-organizations-and-recognition", "veterans-pensions-and-compensation"));
             for (String subject: defenseSubjects) {
-                getSubjectBills(subject, defenseBills);
+                getSubjectBills(subject, defenseBills, 0);
             }
 
             Set<String> immigrationSubjects = new HashSet<>(Arrays.asList("border-security-and-unlawful-immigration","immigration-status-and-procedures","immigrant-health-and-welfare"));
             for (String subject: immigrationSubjects) {
-                getSubjectBills(subject, immigrationBills);
+                getSubjectBills(subject, defenseBills, 0);
             }
 //
             Set<String> gunSubjects = new HashSet<>(Arrays.asList("firearms-and-explosives", "violent-crime"));
             for (String subject: gunSubjects) {
-                getSubjectBills(subject, gunBills);
+                getSubjectBills(subject, defenseBills, 0);
             }
 //
             Set<String> economySubject = new HashSet<>(Arrays.asList("capital-gains-tax","economic-development","employment-taxes","free-trade-and-trade-barriers",
-                    "general-taxation-matters","income-tax-credits","income-tax-deductions","income-tax-deferral","income-tax-exclusion","income-tax-rates",
+                    "general-taxation-matters","income-tax-credits","income-tax-deductions","income-tax-deferral","income-tax-exclusion","income-tax-rates", "minority-employment",
                     "infrastructure-development","normal-trade-relations-most-favored-nation-treatment","property-tax","social-security-and-elderly-assistance",
                     "tax-reform-and-tax-simplification","trade-agreements-and-negotiations","trade-restrictions","transfer-and-inheritance-taxes",
                     "urban-and-suburban-affairs-and-development","wages-and-earnings","womens-employment"));
             for (String subject: economySubject) {
-                getSubjectBills(subject, economyBills);
+                getSubjectBills(subject, economyBills, 0);
             }
 
             Set<String> healthSubjects = new HashSet<>(Arrays.asList("abortion","comprehensive-health-care","drug-alcohol-tobacco-use","family-planning-and-birth-control",
-                    "general-health-and-health-care-finance-matters","health-care-costs-and-insurance","health-care-coverage-and-access","health-care-quality",
+                    "general-health-and-health-care-finance-matters","health-care-costs-and-insurance","health-care-coverage-and-access","health-care-quality", "minority-health",
                     "medicaid","medicare","prescription-drugs","religion-and-medicine","sex-and-reproductive-health","teenage-pregnancy","womens-health"));
             for (String subject: healthSubjects) {
-                getSubjectBills(subject, healthBills);
+                getSubjectBills(subject, healthBills, 0);
             }
 
             Set<String> socialSubjects = new HashSet<>(Arrays.asList("criminal-procedure-and-sentencing","due-process-and-equal-protection",
-                    "employment-discrimination-and-employee-rights","first-amendment-rights","hate-crimes","minority-education","minority-employment",
-                    "minority-health","public-housing", "racial-and-ethnic-relations","right-of-privacy","sex-gender-sexual-orientation-discrimination","voting-rights","womens-rights"));
+                    "employment-discrimination-and-employee-rights","first-amendment-rights","hate-crimes","racial-and-ethnic-relations","right-of-privacy",
+                    "public-housing","sex-gender-sexual-orientation-discrimination","voting-rights","womens-rights"));
             for (String subject: socialSubjects) {
-                getSubjectBills(subject, socialBills);
+                getSubjectBills(subject, socialBills, 0);
             }
 
-            Set<String> education = new HashSet<>(Arrays.asList("child-care-and-development","education-programs-funding","educational-facilities-and-institutions",
+            Set<String> education = new HashSet<>(Arrays.asList("child-care-and-development","education-programs-funding","educational-facilities-and-institutions","minority-education",
                     "educational-guidance","general-education-matters","higher-education","preschool-education","religion-in-the-public-schools","school-administration",
                     "science-and-engineering-education","student-aid-and-college-costs","teaching-teachers-curricula","vocational-and-technical-education","womens-education"));
             for (String subject: education) {
-                getSubjectBills(subject, educationBills);
+                getSubjectBills(subject, educationBills, 0);
             }
 
             return bills;
         }
 
-        private static void getSubjectBills(final String subject, final Set<Bill> bills){
+        private static void getSubjectBills(final String subject, final Set<Bill> bills, int offset){
             String arguments = String.format("bills/subjects/%s.json", subject);
             final String URL = BASE_URL + arguments;
 
             RequestParams params = new RequestParams();
+            params.put("offset", offset);
             RequestHeaders headers = new RequestHeaders();
             headers.put("X-API-Key", KEY);
             AsyncHttpClient client = new AsyncHttpClient();
@@ -373,6 +371,10 @@ public class ProPublicaAPI {
 
         private static Map<String, Integer> parseCosponsors(JSONObject jsonObject) throws JSONException {
             Map<String, Integer> cosponsors = new HashMap<>();
+            cosponsors.put("D", 0);
+            cosponsors.put("R", 0);
+            cosponsors.put("ID", 0);
+
             Iterator<String> keys = jsonObject.keys();
             while(keys.hasNext() ) {
                 String sponsorParty = (String)keys.next();
@@ -469,7 +471,7 @@ public class ProPublicaAPI {
         }
 
         private static void parseSpecificBillActions(JSONArray jsonArray, Bill bill) throws JSONException {
-            List<String> votingMotions = new ArrayList<>(Arrays.asList("On Agreeing to the Conference Report", "On the Joint Resolution", "On Passage", "On Passage of the Bill", "On Motion to Suspend the Rules and Pass"));
+            List<String> votingMotions = new ArrayList<>(Arrays.asList("On Agreeing to the Conference Report", "On the Joint Resolution", "On Passage", "On Passage of the Bill", "On Cloture on the Motion to Proceed", "On Motion to Suspend the Rules and Pass"));
             Boolean house = false;
             Boolean senate = false;
             for (int i = 0; i < jsonArray.length() ; i++) {
@@ -541,6 +543,9 @@ public class ProPublicaAPI {
 
             //set date
             rollCall.setDate(parseDate(jsonObject.getString("date")));
+
+            //set result
+            rollCall.setResult(jsonObject.getString("result"));
 
             //set voting party breakdowns
             List<String> partyList = new ArrayList<>(Arrays.asList("democratic", "republican", "independent", "total"));

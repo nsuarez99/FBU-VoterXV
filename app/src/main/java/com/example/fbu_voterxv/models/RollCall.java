@@ -16,6 +16,7 @@ public class RollCall {
     private Map<String, Integer> independentBreakdown;
     private Map<String, Integer> totalBreakdown;
     private Date date;
+    private String result;
 
     private Map<Representative, String> votes;
 
@@ -71,5 +72,13 @@ public class RollCall {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 }
