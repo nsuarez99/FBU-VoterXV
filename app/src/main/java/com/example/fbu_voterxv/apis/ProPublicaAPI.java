@@ -255,16 +255,19 @@ public class ProPublicaAPI {
                     "veterans-organizations-and-recognition", "veterans-pensions-and-compensation"));
             for (String subject: defenseSubjects) {
                 getSubjectBills(subject, defenseBills, 0);
+                getSubjectBills(subject, defenseBills, 20);
             }
 
             Set<String> immigrationSubjects = new HashSet<>(Arrays.asList("border-security-and-unlawful-immigration","immigration-status-and-procedures","immigrant-health-and-welfare"));
             for (String subject: immigrationSubjects) {
                 getSubjectBills(subject, defenseBills, 0);
+                getSubjectBills(subject, defenseBills, 20);
             }
 //
             Set<String> gunSubjects = new HashSet<>(Arrays.asList("firearms-and-explosives", "violent-crime"));
             for (String subject: gunSubjects) {
                 getSubjectBills(subject, defenseBills, 0);
+                getSubjectBills(subject, defenseBills, 20);
             }
 //
             Set<String> economySubject = new HashSet<>(Arrays.asList("capital-gains-tax","economic-development","employment-taxes","free-trade-and-trade-barriers",
@@ -274,6 +277,7 @@ public class ProPublicaAPI {
                     "urban-and-suburban-affairs-and-development","wages-and-earnings","womens-employment"));
             for (String subject: economySubject) {
                 getSubjectBills(subject, economyBills, 0);
+                getSubjectBills(subject, economyBills, 20);
             }
 
             Set<String> healthSubjects = new HashSet<>(Arrays.asList("abortion","comprehensive-health-care","drug-alcohol-tobacco-use","family-planning-and-birth-control",
@@ -281,6 +285,7 @@ public class ProPublicaAPI {
                     "medicaid","medicare","prescription-drugs","religion-and-medicine","sex-and-reproductive-health","teenage-pregnancy","womens-health"));
             for (String subject: healthSubjects) {
                 getSubjectBills(subject, healthBills, 0);
+                getSubjectBills(subject, healthBills, 20);
             }
 
             Set<String> socialSubjects = new HashSet<>(Arrays.asList("criminal-procedure-and-sentencing","due-process-and-equal-protection",
@@ -288,6 +293,7 @@ public class ProPublicaAPI {
                     "public-housing","sex-gender-sexual-orientation-discrimination","voting-rights","womens-rights"));
             for (String subject: socialSubjects) {
                 getSubjectBills(subject, socialBills, 0);
+                getSubjectBills(subject, socialBills, 20);
             }
 
             Set<String> education = new HashSet<>(Arrays.asList("child-care-and-development","education-programs-funding","educational-facilities-and-institutions","minority-education",
@@ -295,6 +301,7 @@ public class ProPublicaAPI {
                     "science-and-engineering-education","student-aid-and-college-costs","teaching-teachers-curricula","vocational-and-technical-education","womens-education"));
             for (String subject: education) {
                 getSubjectBills(subject, educationBills, 0);
+                getSubjectBills(subject, educationBills, 20);
             }
 
             return bills;
@@ -451,18 +458,14 @@ public class ProPublicaAPI {
             }
             JSONObject jsonObject = jsonArray.getJSONObject(0);
 
-            //TODO implement veto
-//            String veto = jsonObject.getString("vetoed");
-//            if (houseVote != "null"){
-//                bill.setHouse_vote(true);
-//            }
-//            if (senateVote != "null"){
-//                bill.setHouse_vote(true);
-//            }
-//            if (veto != "null"){
-//                bill.setHouse_vote(true);
-//            }
-
+            String veto = jsonObject.getString("vetoed");
+            if (veto != "null"){
+                bill.setVeto(parseDate(veto));
+            }
+            String law = jsonObject.getString("enacted");
+            if (law != "null"){
+                bill.setLaw(parseDate(law));
+            }
 
             JSONArray actions = jsonObject.getJSONArray("votes");
             parseSpecificBillActions(actions, bill);
@@ -471,7 +474,7 @@ public class ProPublicaAPI {
         }
 
         private static void parseSpecificBillActions(JSONArray jsonArray, Bill bill) throws JSONException {
-            List<String> votingMotions = new ArrayList<>(Arrays.asList("On Agreeing to the Conference Report", "On the Joint Resolution", "On Passage", "On Passage of the Bill", "On Cloture on the Motion to Proceed", "On Motion to Suspend the Rules and Pass"));
+            List<String> votingMotions = new ArrayList<>(Arrays.asList("On Agreeing to the Conference Report", "On the Motion", "On the Joint Resolution", "On Passage", "On Passage of the Bill", "On Cloture on the Motion to Proceed", "On Motion to Suspend the Rules and Pass"));
             Boolean house = false;
             Boolean senate = false;
             for (int i = 0; i < jsonArray.length() ; i++) {

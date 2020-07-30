@@ -97,43 +97,50 @@ public class RepresentativeFragment extends Fragment {
         bottomNavigationView = getActivity().findViewById(R.id.votingHistoryNavigation);
 
 
-        //set up bottom navigation
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Fragment fragment;
-                Bundle bundle = new Bundle();
-                switch (menuItem.getItemId()) {
-                    case R.id.defenseIcon:
-                        fragment = new VotingHistoryFragment();
-                        bundle.putParcelable("bills", Parcels.wrap(bills.get("defense")));
-                        break;
-                    case R.id.healthIcon:
-                        fragment = new VotingHistoryFragment();
-                        bundle.putParcelable("bills", Parcels.wrap(bills.get("health")));
-                        break;
-                    case R.id.educationIcon:
-                        fragment = new VotingHistoryFragment();
-                        bundle.putParcelable("bills", Parcels.wrap(bills.get("education")));
-                        break;
-                    case R.id.socialIcon:
-                        fragment = new VotingHistoryFragment();
-                        bundle.putParcelable("bills", Parcels.wrap(bills.get("social")));
-                        break;
-                    default:
-                        fragment = new VotingHistoryFragment();
-                        bundle.putParcelable("bills", Parcels.wrap(bills.get("economy")));
-                        break;
-                }
-                //pass user data with fragment
-                bundle.putParcelable("rep", Parcels.wrap(representative));
-                fragment.setArguments(bundle);
+        //if vice president then dont show voting
+        if (representative.getOffice() == Offices.VICE_PRESIDENT){
+           bottomNavigationView.setVisibility(View.GONE);
+        }
+        else{
+            //set up bottom navigation
+            bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                    Fragment fragment;
+                    Bundle bundle = new Bundle();
+                    switch (menuItem.getItemId()) {
+                        case R.id.defenseIcon:
+                            fragment = new VotingHistoryFragment();
+                            bundle.putParcelable("bills", Parcels.wrap(bills.get("defense")));
+                            break;
+                        case R.id.healthIcon:
+                            fragment = new VotingHistoryFragment();
+                            bundle.putParcelable("bills", Parcels.wrap(bills.get("health")));
+                            break;
+                        case R.id.educationIcon:
+                            fragment = new VotingHistoryFragment();
+                            bundle.putParcelable("bills", Parcels.wrap(bills.get("education")));
+                            break;
+                        case R.id.socialIcon:
+                            fragment = new VotingHistoryFragment();
+                            bundle.putParcelable("bills", Parcels.wrap(bills.get("social")));
+                            break;
+                        default:
+                            fragment = new VotingHistoryFragment();
+                            bundle.putParcelable("bills", Parcels.wrap(bills.get("economy")));
+                            break;
+                    }
+                    //pass user data with fragment
+                    bundle.putParcelable("rep", Parcels.wrap(representative));
+                    fragment.setArguments(bundle);
 
-                //set fragment
-                fragmentManager.beginTransaction().replace(R.id.votingHistoryLayoutContainer, fragment).commit();
-                return true;
-            }
-        });
-        bottomNavigationView.setSelectedItemId(R.id.economyIcon);
+                    //set fragment
+                    fragmentManager.beginTransaction().replace(R.id.votingHistoryLayoutContainer, fragment).commit();
+                    return true;
+                }
+            });
+            bottomNavigationView.setSelectedItemId(R.id.economyIcon);
+        }
+
     }
 }

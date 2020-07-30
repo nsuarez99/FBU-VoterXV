@@ -22,7 +22,8 @@ public class Bill{
     private String subject;
     private Date lastAction;
     private String url;
-    private Boolean veto;
+    private Date veto;
+    private Date law;
     private RollCall houseRollCall;
     private RollCall senateRollCall;
 
@@ -68,10 +69,6 @@ public class Bill{
         return url;
     }
 
-    public Boolean getVeto() {
-        return veto;
-    }
-
     public RollCall getHouseRollCall() {
         return houseRollCall;
     }
@@ -86,10 +83,6 @@ public class Bill{
 
     public void setSenateRollCall(RollCall senateRollCall) {
         this.senateRollCall = senateRollCall;
-    }
-
-    public void setVeto(Boolean veto) {
-        this.veto = veto;
     }
 
     public void setUrl(String url) {
@@ -130,6 +123,22 @@ public class Bill{
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public Date getVeto() {
+        return veto;
+    }
+
+    public void setVeto(Date veto) {
+        this.veto = veto;
+    }
+
+    public Date getLaw() {
+        return law;
+    }
+
+    public void setLaw(Date law) {
+        this.law = law;
     }
 
     @Override

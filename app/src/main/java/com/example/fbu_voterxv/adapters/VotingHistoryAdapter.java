@@ -28,13 +28,8 @@ public class VotingHistoryAdapter extends RecyclerView.Adapter<VotingHistoryAdap
     public static final String TAG = "VotingHistoryFragment";
     private Context context;
     private List<Bill> bills;
-    private OnClickListener onClickListener;
     private Representative representative;
     private Map<Bill, String> votes;
-
-    public interface OnClickListener{
-        void onClick(int position);
-    }
 
     public VotingHistoryAdapter(Context context, List<Bill> bills, Representative representative, Map<Bill, String> votes) {
         this.context = context;
@@ -93,19 +88,6 @@ public class VotingHistoryAdapter extends RecyclerView.Adapter<VotingHistoryAdap
         }
 
         public void bind(Bill bill) {
-            //get roll call of representative
-            RollCall rollCall;
-            if (representative.getOffice() == Offices.SENATE){
-                rollCall = bill.getSenateRollCall();
-            }
-            else if (representative.getOffice() == Offices.HOUSE_OF_REPRESENTATIVES) {
-                rollCall = bill.getHouseRollCall();
-            }
-            else{
-                billLayout.setVisibility(View.GONE);
-                return;
-            }
-
             //get vote of representative and if not in congress then skips bill
             String vote = votes.get(bill);
             if (vote.equals("Yes")){
@@ -121,30 +103,75 @@ public class VotingHistoryAdapter extends RecyclerView.Adapter<VotingHistoryAdap
             Log.i(TAG, bill.getCosponsors().toString());
             Log.i(TAG, bill.getSponsor().getParty());
 
-
-            //set the total vote record
-            billVotingRecord.setText(String.format("%d - %d (D: %d, R: %d, I:%d) %s", rollCall.getTotalBreakdown().get("yes"), rollCall.getTotalBreakdown().get("no"),
-                    rollCall.getDemocratBreakdown().get("yes"), rollCall.getRepublicanBreakdown().get("yes"), rollCall.getIndependentBreakdown().get("yes"), rollCall.getResult()));
-
-
             billSummary.setText(bill.getBriefSummary());
             billTitle.setText(bill.getTitle());
 
-            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-            String date = formatter.format(rollCall.getDate());
-            billDate.setText(date);
 
-//            setListeners();
+            if (representative.getOffice() == Offices.PRESIDENT || representative.getOffice() == Offices.VICE_PRESIDENT){
+                //set date
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                String date = "";
+                if (bill.getVeto() != null){
+                    date = formatter.format(bill.getVeto());
+
+                }
+                else{
+                    date = formatter.format(bill.getLaw());
+                }
+                billDate.setText(date);
+
+                //set vote breakdown
+                RollCall rollCallSenate = bill.getSenateRollCall();
+                RollCall rollCallHouse = bill.getHouseRollCall();
+
+                int senateYes;
+                int senateNo;
+                int houseYes;
+                int houseNo;
+
+                //if the vote was a voice vote and not roll call then make unanimous
+                if (rollCallSenate == null){
+                    senateYes = 100;
+                    senateNo = 0;
+                }
+                else{
+                    senateYes = rollCallSenate.getTotalBreakdown().get("yes");
+                    senateNo = rollCallSenate.getTotalBreakdown().get("no");
+                }
+                if (rollCallHouse == null){
+                    houseYes = 435;
+                    houseNo = 400;
+                }
+                else{
+                    houseYes = rollCallHouse.getTotalBreakdown().get("yes");
+                    houseNo = rollCallHouse.getTotalBreakdown().get("no");
+                }
+
+                //set the total vote record
+                billVotingRecord.setText(String.format("Senate: %d - %d House: %d - %d",senateYes , senateNo, houseYes, houseNo));
+
+            }
+            else{
+                //get roll call of representative
+                RollCall rollCall;
+                if (representative.getOffice() == Offices.SENATE){
+                    rollCall = bill.getSenateRollCall();
+                }
+                else{
+                    rollCall = bill.getHouseRollCall();
+                }
+
+                //set date
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                String date = formatter.format(rollCall.getDate());
+                billDate.setText(date);
+
+                //set the total vote record
+                billVotingRecord.setText(String.format("%d - %d (D: %d, R: %d, I:%d) %s", rollCall.getTotalBreakdown().get("yes"), rollCall.getTotalBreakdown().get("no"),
+                        rollCall.getDemocratBreakdown().get("yes"), rollCall.getRepublicanBreakdown().get("yes"), rollCall.getIndependentBreakdown().get("yes"), rollCall.getResult()));
+            }
         }
 
-//        //set on click listeners
-//        private void setListeners() {
-//            votingCheckbox.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    onClickListener.onClick(getAdapterPosition());
-//                }
-//            });
-//        }
     }
+
 }

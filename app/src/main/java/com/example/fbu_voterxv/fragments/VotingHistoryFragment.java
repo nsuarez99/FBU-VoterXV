@@ -93,7 +93,13 @@ public class VotingHistoryFragment extends Fragment {
             } else if (representative.getOffice() == Offices.HOUSE_OF_REPRESENTATIVES) {
                 rollCall = bill.getHouseRollCall();
             } else {
-                return newVotes;
+                if (bill.getLaw() != null ){
+                    newVotes.put(bill, "Yes");
+                }
+                else if (bill.getVeto() != null){
+                    newVotes.put(bill, "No");
+                }
+                continue;
             }
 
             //chamber has not voted on this bill
@@ -158,68 +164,81 @@ public class VotingHistoryFragment extends Fragment {
         int billsSize = bills.size();
         List<String> votedAgainstParty = new ArrayList<>();
         for (Bill bill : bills.keySet()){
-            RollCall rollCall ;
-            double totalVotes = 0;
-            if (offices == Offices.HOUSE_OF_REPRESENTATIVES){
-                rollCall = bill.getHouseRollCall();
-                totalVotes = 435;
-            }
-            else if (offices == Offices.SENATE){
-                rollCall = bill.getSenateRollCall();
-                totalVotes = 100;
-            }
-            else{
-                return 0;
+            Map<RollCall, Integer> rollCallMap = new HashMap<>();
+
+            //if signed bill then ignore but if veto then calculate score
+            if (offices == Offices.PRESIDENT || offices == Offices.VICE_PRESIDENT){
+                if (bills.get(bill).equals("Yes")){
+                    billsSize -= 1;
+                    continue;
+                }
             }
 
-            //get breakdown of sponsors and cosponsors by party
-            Map<String, Integer> cosponsors = bill.getCosponsors();
-            int democrats = cosponsors.get("D");
-            int republicans = cosponsors.get("R");
-            int independents = cosponsors.get("ID");
-            String sponsorParty = bill.getSponsor().getParty();
-            if (sponsorParty.equals("Democrat")){
-                democrats += 1;
+            if (offices == Offices.HOUSE_OF_REPRESENTATIVES || offices == Offices.PRESIDENT){
+                rollCallMap.put(bill.getHouseRollCall(), 435);
             }
-            else if (sponsorParty.equals("Republican")){
-                republicans += 1;
-            }
-            else{
-                independents += 1;
-            }
-            final double totalSponsors = democrats + independents + republicans;
-
-            //if over 85% of the chamber voted for the bill then score is 0 (neutral) unless voted against then adds bill to list
-            boolean massVote = false;
-            double totalPercentYes = rollCall.getTotalBreakdown().get("yes") / totalVotes;
-            if (totalPercentYes > 0.85){
-                massVote = true;
+            if (offices == Offices.SENATE || offices == Offices.PRESIDENT){
+                rollCallMap.put(bill.getSenateRollCall(), 100);
             }
 
-            //set political score
-            double score = politicalScale(democrats / totalSponsors * 100);
-            String vote = bills.get(bill);
-            if (vote.equals("Yes") && massVote){
-                score = 0;
-            }
-            else if (vote.equals("No")){
-                if (massVote){
-                    votedAgainstParty.add(sponsorParty);
+            for (RollCall rollCall : rollCallMap.keySet()){
+                int totalVotes = rollCallMap.get(rollCall);
+
+                //if one of chamber votes was a voice vote and not rollcall
+                if (rollCall == null){
+                    continue;
+                }
+
+                //get breakdown of sponsors and cosponsors by party
+                Map<String, Integer> cosponsors = bill.getCosponsors();
+                int democrats = cosponsors.get("D");
+                int republicans = cosponsors.get("R");
+                int independents = cosponsors.get("ID");
+                String sponsorParty = bill.getSponsor().getParty();
+                if (sponsorParty.equals("Democrat")){
+                    democrats += 1;
+                }
+                else if (sponsorParty.equals("Republican")){
+                    republicans += 1;
+                }
+                else{
+                    independents += 1;
+                }
+                final double totalSponsors = democrats + independents + republicans;
+
+                //if over 85% of the chamber voted for the bill then score is 0 (neutral) unless voted against then adds bill to list
+                boolean massVote = false;
+                double totalPercentYes = rollCall.getTotalBreakdown().get("yes") / totalVotes;
+                if (totalPercentYes > 0.85){
+                    massVote = true;
+                }
+
+                //set political score
+                double score = politicalScale(democrats / totalSponsors * 100);
+                String vote = bills.get(bill);
+                if (vote.equals("Yes") && massVote){
+                    score = 0;
+                }
+                else if (vote.equals("No")){
+                    if (massVote){
+                        votedAgainstParty.add(sponsorParty);
+                        score = 0;
+                        billsSize -= 1;
+                    }
+                    else{
+                        score = -score;
+                    }
+                }
+                else if (vote.equals("Not Voting")){
                     score = 0;
                     billsSize -= 1;
                 }
-                else{
-                    score = -score;
-                }
-            }
-            else if (vote.equals("Not Voting")){
-                score = 0;
-                billsSize -= 1;
-            }
 
-            totalScore += score;
+                totalScore += score;
+            }
         }
 
+        //calculate total voting average
         double average = totalScore / billsSize;
         int averageSize = 1;
         if (billsSize == 0){
