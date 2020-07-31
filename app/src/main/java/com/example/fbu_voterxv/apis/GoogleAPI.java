@@ -17,6 +17,7 @@ import com.example.fbu_voterxv.models.Candidate;
 import com.example.fbu_voterxv.models.Election;
 import com.example.fbu_voterxv.models.MyOfficials;
 import com.example.fbu_voterxv.models.Offices;
+import com.example.fbu_voterxv.models.Politician;
 import com.example.fbu_voterxv.models.Representative;
 import com.example.fbu_voterxv.models.User;
 
@@ -103,23 +104,27 @@ public class GoogleAPI {
 
                 Representative representative = new Representative();
 
+                //set name
                 representative.setName(official.getString("name"));
+
+                //set party
                 String party = official.getString("party");
                 int space_index = party.indexOf(" ");
                 if (space_index == -1){
                     space_index = party.length();
                 }
                 representative.setParty(party.substring(0, space_index));
-                representative.setWebsite(official.getJSONArray("urls").getString(0));
 
                 //set photoURL if available
                 if (official.has("photoUrl")){
                     representative.setProfileImage(official.getString("photoUrl"));
                 }
                 else{
-                    representative.setProfileImage("N/A");
-                    Log.i(TAG, representative.getName() + " no photoUrl available");
+                    GoogleAPI.ImageParse.setImage(representative);
                 }
+
+                //set website
+                representative.setWebsite(official.getJSONArray("urls").getString(0));
 
                 //set social media accounts if available
                 JSONArray channels = official.getJSONArray("channels");
@@ -178,7 +183,6 @@ public class GoogleAPI {
             }
         }
     }
-
 
     public static class ElectionParse{
 
@@ -268,9 +272,10 @@ public class GoogleAPI {
             for (int i = 0; i < candidatesJsonArray.length() ; i++) {
                 JSONObject candidatesJsonObject = candidatesJsonArray.getJSONObject(i);
                 Candidate candidate = new Candidate();
-                candidate.setOffice(office);
                 candidate.setName(candidatesJsonObject.getString("name"));
                 candidate.setParty(capitalizeWord(candidatesJsonObject.getString("party").toLowerCase()));
+                GoogleAPI.ImageParse.setImage(candidate);
+                candidate.setOffice(office);
                 candidates.add(candidate);
             }
         }
@@ -288,4 +293,43 @@ public class GoogleAPI {
         }
     }
 
+    public static class ImageParse{
+
+        public static void setImage(final Politician politician){
+            final String URL = "https://www.googleapis.com/customsearch/v1";
+            AsyncHttpClient client = new AsyncHttpClient();
+            RequestParams params = new RequestParams();
+            params.put("key", KEY);
+            params.put("q", politician.getName() + " congress " + politician.getParty());
+            params.put("searchType", "image");
+            params.put("num", 1);
+            params.put("cx", "014531769706675276559:ohhclcewsxs");
+
+            client.get(URL, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Headers headers, JSON json) {
+                    Log.d(TAG, "onSuccess setImage");
+                    JSONObject jsonObject = json.jsonObject;
+                    try{
+                        parseImage(jsonObject.getJSONArray("items"), politician);
+                    }
+                    catch (JSONException e){
+                        Log.e(TAG, "Hit json exception while parcing, error: " + e);
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                    Log.d(TAG, String.format("onFailure setImage: \nstatusCode:%d \nresponse:%s", statusCode, response));
+                }
+            });
+        }
+
+
+        private static void parseImage(JSONArray jsonArray, Politician politician) throws JSONException {
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+            politician.setProfileImage(jsonObject.getString("link"));
+        }
+    }
 }

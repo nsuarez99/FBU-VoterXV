@@ -418,6 +418,7 @@ public class FecAPI {
                     if (election.getOffice() == candidate.getOffice()){
                         if (!election.getCandidates().contains(candidate)){
                             election.getCandidates().add(candidate);
+                            GoogleAPI.ImageParse.setImage(candidate);
                         }
                     }
                 }
