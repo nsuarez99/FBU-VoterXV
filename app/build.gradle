@@ -20,8 +20,8 @@ android {
         buildConfigField("String", "GOOGLE_KEY", apikeyProperties['GOOGLE_KEY'])
         buildConfigField("String", "FEC_KEY", apikeyProperties['FEC_KEY'])
         buildConfigField("String", "PROPPUBLICA_KEY", apikeyProperties['PROPPUBLICA_KEY'])
+        buildConfigField ("String", "BING_KEY", apikeyProperties['BING_KEY'])
         resValue ("string", "GOOGLE_KEY", apikeyProperties['GOOGLE_KEY'])
-
     }
 
     buildTypes {

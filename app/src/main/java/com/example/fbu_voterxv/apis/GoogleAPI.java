@@ -322,6 +322,7 @@ public class GoogleAPI {
                 @Override
                 public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                     Log.d(TAG, String.format("onFailure setImage: \nstatusCode:%d \nresponse:%s", statusCode, response));
+                    BingAPI.ImageParse.setImage(politician);
                 }
             });
         }
