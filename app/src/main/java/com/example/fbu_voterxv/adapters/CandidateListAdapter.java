@@ -78,7 +78,7 @@ public class CandidateListAdapter extends RecyclerView.Adapter<CandidateListAdap
         public void bind(Candidate candidate) {
             candidateName.setText(candidate.getName());
             candidateParty.setText(candidate.getParty());
-            Glide.with(context).load(candidate.getProfileImage()).into(candidateImage);
+            Glide.with(context).load(candidate.getProfileImage()).placeholder(R.drawable.politician).into(candidateImage);
             setListeners();
         }
 

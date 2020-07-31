@@ -69,7 +69,7 @@ public class CandidateFragment extends Fragment {
         office = getActivity().findViewById(R.id.candidateOffice);
         bottomNavigationView = getActivity().findViewById(R.id.politicalViewsNavigation);
 
-        Glide.with(getContext()).load(candidate.getProfileImage()).placeholder(R.drawable.officials).into(image);
+        Glide.with(getContext()).load(candidate.getProfileImage()).placeholder(R.drawable.politician).into(image);
         name.setText(candidate.getName());
         party.setText(candidate.getParty());
         moneyRaised.setText(candidate.getMoney_raisedString());

@@ -38,7 +38,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="40dp"
                     android:layout_marginTop="10dp"
-                    app:srcCompat="@drawable/officials" />
+                    tools:srcCompat="@drawable/officials" />
 
                 <TextView
                     android:id="@+id/presidentName"
@@ -49,7 +49,7 @@
                     android:layout_alignEnd="@+id/presidentImage"
                     android:layout_marginTop="8dp"
                     android:gravity="center_horizontal"
-                    android:text="Barack Obama" />
+                    tools:text="Barack Obama" />
 
                 <TextView
                     android:id="@+id/presidentParty"
@@ -60,7 +60,7 @@
                     android:layout_alignEnd="@+id/presidentName"
                     android:gravity="center"
                     android:layout_marginTop="4dp"
-                    android:text="Democrat"/>
+                    tools:text="Democrat"/>
 
                 <ImageView
                     android:id="@+id/vicePresidentImage"
@@ -70,7 +70,7 @@
                     android:layout_marginStart="67dp"
                     android:layout_marginTop="10dp"
                     android:layout_toEndOf="@+id/presidentImage"
-                    android:src="@drawable/officials"/>
+                    tools:src="@drawable/officials"/>
 
                 <TextView
                     android:id="@+id/vicePresidentName"
@@ -81,7 +81,7 @@
                     android:layout_alignEnd="@+id/vicePresidentImage"
                     android:gravity="center"
                     android:layout_marginTop="8dp"
-                    android:text="Barack Obama" />
+                    tools:text="Barack Obama" />
 
                 <TextView
                     android:id="@+id/vicePresidentParty"
@@ -92,7 +92,7 @@
                     android:layout_alignEnd="@+id/vicePresidentName"
                     android:gravity="center"
                     android:layout_marginTop="4dp"
-                    android:text="Democrat" />
+                    tools:text="Democrat" />
             </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/senatorsLayout"
@@ -118,7 +118,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="40dp"
                     android:layout_marginTop="10dp"
-                    android:src="@drawable/officials" />
+                    tools:src="@drawable/officials" />
 
                 <TextView
                     android:id="@+id/senatorSrName"
@@ -129,7 +129,7 @@
                     android:layout_alignEnd="@+id/senatorSrImage"
                     android:gravity="center"
                     android:layout_marginTop="8dp"
-                    android:text="Barack Obama" />
+                    tools:text="Barack Obama" />
 
                 <TextView
                     android:id="@+id/senatorSrParty"
@@ -140,7 +140,7 @@
                     android:layout_alignEnd="@+id/senatorSrName"
                     android:gravity="center"
                     android:layout_marginTop="4dp"
-                    android:text="Democrat" />
+                    tools:text="Democrat" />
 
                 <ImageView
                     android:id="@+id/senatorJrImage"
@@ -150,7 +150,7 @@
                     android:layout_marginStart="67dp"
                     android:layout_marginTop="10dp"
                     android:layout_toEndOf="@+id/senatorSrImage"
-                    android:src="@drawable/officials" />
+                    tools:src="@drawable/officials" />
 
                 <TextView
                     android:id="@+id/senatorJrName"
@@ -161,7 +161,7 @@
                     android:layout_alignEnd="@+id/senatorJrImage"
                     android:gravity="center"
                     android:layout_marginTop="8dp"
-                    android:text="Barack Obama" />
+                    tools:text="Barack Obama" />
 
                 <TextView
                     android:id="@+id/senatorJrParty"
@@ -172,7 +172,7 @@
                     android:layout_alignEnd="@+id/senatorJrName"
                     android:gravity="center"
                     android:layout_marginTop="4dp"
-                    android:text="Democrat" />
+                    tools:text="Democrat" />
             </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/congressmanLayout"
@@ -196,7 +196,7 @@
                     android:layout_height="120dp"
                     android:layout_below="@+id/congressmanTitle"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/officials" />
+                    tools:src="@drawable/officials" />
 
                 <TextView
                     android:id="@+id/congressmanName"
@@ -204,7 +204,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/congressmanImage"
                     android:layout_centerInParent="true"
-                    android:text="Barack Obama" />
+                    tools:text="Barack Obama" />
 
                 <TextView
                     android:id="@+id/congressmanParty"
@@ -212,7 +212,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/congressmanName"
                     android:layout_centerInParent="true"
-                    android:text="Democrat" />
+                    tools:text="Democrat" />
             </RelativeLayout>
 
 

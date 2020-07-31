@@ -90,7 +90,7 @@ public class RepresentativeFragment extends Fragment {
 
         int radius = 40;
         int margin = 0;
-        Glide.with(getContext()).load(representative.getProfileImage()).placeholder(R.drawable.officials).transform(new RoundedCornersTransformation(radius, margin)).into(image);
+        Glide.with(getContext()).load(representative.getProfileImage()).placeholder(R.drawable.politician).transform(new RoundedCornersTransformation(radius, margin)).into(image);
 
 
         final FragmentManager fragmentManager = getChildFragmentManager();

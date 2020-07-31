@@ -12,7 +12,8 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_below="@+id/executiveTitle"
-        app:srcCompat="@drawable/officials" />
+        android:scaleType="fitCenter"
+        tools:srcCompat="@drawable/politician" />
 
     <TextView
         android:id="@+id/candidateListName"
@@ -20,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/candidateListImage"
         android:layout_centerHorizontal="true"
-        android:text="Barack Obama" />
+        tools:text="Barack Obama" />
 
     <TextView
         android:id="@+id/candidateListParty"
@@ -28,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/candidateListName"
         android:layout_centerHorizontal="true"
-        android:text="Democrat"/>
+        tools:text="Democrat"/>
 
 
 </RelativeLayout>
