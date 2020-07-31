@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/defensePoliticalIcon"
+        android:icon="@drawable/military"
+        android:title="Defense"
+        android:enabled="true"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/economyPoliticalIcon"
+        android:icon="@drawable/money"
+        android:title="Economy"
+        android:enabled="true"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/educationPoliticalIcon"
+        android:icon="@drawable/education"
+        android:title="Education"
+        android:enabled="true"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/healthPoliticalIcon"
+        android:icon="@drawable/health"
+        android:title="Health Care"
+        android:enabled="true"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/socialPoliticalIcon"
+        android:icon="@drawable/social"
+        android:title="Social Justice"
+        android:enabled="true"
+        app:showAsAction="always" />
+
+</menu>
