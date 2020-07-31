@@ -79,9 +79,11 @@ public class MainActivity extends AppCompatActivity {
         populateUser();
 
         //get bills data
-        
-        ProPublicaAPI.OfficialsVotingParse.getBills(bills);
-
+        new Thread(new Runnable() {
+            public void run() {
+                ProPublicaAPI.OfficialsVotingParse.getBills(bills);
+            }
+        }).start();
 
 
         //checks to see if it comes from signup page to send them to the profile page
