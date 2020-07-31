@@ -203,7 +203,7 @@ public class GoogleAPI {
                     JSONObject jsonObject = json.jsonObject;
                     try{
                         user.setElectionsList(parseElectionList(jsonObject));
-                        FecAPI.CandidateParse.setCandidates(user);
+                        FecAPI.ElectionParse.getElections(user);
                     }
                     catch (JSONException e){
                         Log.e(TAG, "Hit json exception while parcing, error: " + e);
@@ -214,6 +214,7 @@ public class GoogleAPI {
                 @Override
                 public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                     user.setElectionsList(new ArrayList<Election>());
+                    FecAPI.ElectionParse.getElections(user);
                     Log.d(TAG, String.format("onFailure Elections: \nstatusCode:%d \nresponse:%s", statusCode, response));
                 }
             });
@@ -236,17 +237,20 @@ public class GoogleAPI {
 
                 String office = electionsJSONObject.getString("office");
                 if (office.equals(ELECTION_CONGRESSMAN)){
-                    election.setName(election_name + " -\n" + Offices.HOUSE_OF_REPRESENTATIVES);
+                    election.setOffice(Offices.HOUSE_OF_REPRESENTATIVES);
+                    election.setName(election_name);
                     parseCandidate(electionsJSONObject, election, Offices.HOUSE_OF_REPRESENTATIVES);
                     electionsList.add(election);
                 }
                 else if (office.equals(ELECTION_SENATOR)){
-                    election.setName(election_name + " -\n" + Offices.SENATE);
+                    election.setOffice(Offices.SENATE);
+                    election.setName(election_name);
                     parseCandidate(electionsJSONObject, election, Offices.SENATE);
                     electionsList.add(election);
                 }
                 else if (office.equals(ELECTION_PRESIDENT)){
-                    election.setName(election_name + " -\n" + Offices.PRESIDENT);
+                    election.setOffice(Offices.PRESIDENT);
+                    election.setName(election_name);
                     parseCandidate(electionsJSONObject, election, Offices.PRESIDENT);
                     electionsList.add(election);
                 }

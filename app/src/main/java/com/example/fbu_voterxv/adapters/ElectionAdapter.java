@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.fbu_voterxv.R;
 import com.example.fbu_voterxv.models.Election;
+import com.example.fbu_voterxv.models.Offices;
 import com.parse.ParseFile;
 
 import java.util.List;
@@ -75,7 +76,7 @@ public class ElectionAdapter extends RecyclerView.Adapter<ElectionAdapter.ViewHo
         }
 
         public void bind(Election election) {
-            electionButton.setText(election.getName());
+            electionButton.setText(election.getName() + " -\n" + election.getOffice());
             electionDate.setText(election.getDateString());
             setListeners();
         }

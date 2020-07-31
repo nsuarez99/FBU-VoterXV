@@ -2,6 +2,8 @@ package com.example.fbu_voterxv.models;
 
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,6 +22,7 @@ public class Election {
     private String name;
     private Date date;
     private List<Candidate> candidates;
+    private Offices office;
 
     public Election(){}
 
@@ -66,5 +69,27 @@ public class Election {
     @Override
     public String toString(){
         return name;
+    }
+
+    @Override
+    public boolean equals(Object object){
+        if (object instanceof Election){
+            return sameValue((Election) object);
+        }
+        else{
+            return false;
+        }
+    }
+
+    private boolean sameValue(Election other){
+        return other.name.toLowerCase().equals(name.toLowerCase()) &&  other.date.equals(date) && other.office == office;
+    }
+
+    public Offices getOffice() {
+        return office;
+    }
+
+    public void setOffice(Offices office) {
+        this.office = office;
     }
 }

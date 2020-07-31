@@ -46,8 +46,4 @@ public class Candidate extends Politician{
         this.slogan = slogan;
     }
 
-    //        public static Candidate fromJson(JSONObject jsonObject){
-//        //TODO parse election data from JSON
-//    }
-
 }

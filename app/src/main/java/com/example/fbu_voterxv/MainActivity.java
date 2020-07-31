@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         populateUser();
 
         //get bills data
+        
         ProPublicaAPI.OfficialsVotingParse.getBills(bills);
 
 
@@ -156,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
         //get user representatives and election data
         GoogleAPI.OfficialsParse.setMyOfficials(user, fragmentManager.beginTransaction(), bills);
-//        GoogleAPI.ElectionParse.setElections(user);
+        GoogleAPI.ElectionParse.setElections(user);
 
     }
 
