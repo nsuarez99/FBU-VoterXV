@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 public class CandidateFragment extends Fragment {
 
     private ImageView image;
@@ -69,7 +71,9 @@ public class CandidateFragment extends Fragment {
         office = getActivity().findViewById(R.id.candidateOffice);
         bottomNavigationView = getActivity().findViewById(R.id.politicalViewsNavigation);
 
-        Glide.with(getContext()).load(candidate.getProfileImage()).placeholder(R.drawable.politician).into(image);
+        int radius = 40;
+        int margin = 0;
+        Glide.with(getContext()).load(candidate.getProfileImage()).placeholder(R.drawable.politician).transform(new RoundedCornersTransformation(radius, margin)).into(image);
         name.setText(candidate.getName());
         party.setText(candidate.getParty());
         moneyRaised.setText(candidate.getMoney_raisedString());

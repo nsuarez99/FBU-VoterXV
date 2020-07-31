@@ -27,6 +27,8 @@ import org.parceler.Parcels;
 import java.util.List;
 import java.util.Map;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 
 public class OfficialsFragment extends Fragment {
 
@@ -106,35 +108,38 @@ public class OfficialsFragment extends Fragment {
     }
 
     public void populateOfficials(){
+        int radius = 40;
+        int margin = 0;
+
         //set president layout views
         Politician president = myOfficials.getPresident();
         presidentName.setText(president.getName());
         presidentParty.setText(president.getParty());
-        Glide.with(getContext()).load(president.getProfileImage()).placeholder(R.drawable.politician).into(presidentImage);
+        Glide.with(getContext()).load(president.getProfileImage()).placeholder(R.drawable.politician).transform(new RoundedCornersTransformation(radius, margin)).into(presidentImage);
 
         //set vicepresident layout views
         Politician vicePresident = myOfficials.getVicePresident();
         vicePresidentName.setText(vicePresident.getName());
         vicePresidentParty.setText(vicePresident.getParty());
-        Glide.with(getContext()).load(vicePresident.getProfileImage()).placeholder(R.drawable.politician).into(vicePresidentImage);
+        Glide.with(getContext()).load(vicePresident.getProfileImage()).placeholder(R.drawable.politician).transform(new RoundedCornersTransformation(radius, margin)).into(vicePresidentImage);
 
         //set senior senator layout views
         Politician senatorSr = myOfficials.getSeniorSenator();
         senatorSrName.setText(senatorSr.getName());
         senatorSrParty.setText(senatorSr.getParty());
-        Glide.with(getContext()).load(senatorSr.getProfileImage()).placeholder(R.drawable.politician).into(senatorSrImage);
+        Glide.with(getContext()).load(senatorSr.getProfileImage()).placeholder(R.drawable.politician).transform(new RoundedCornersTransformation(radius, margin)).into(senatorSrImage);
 
         //set junior senator layout views
         Politician senatorJr = myOfficials.getJuniorSenator();
         senatorJrName.setText(senatorJr.getName());
         senatorJrParty.setText(senatorJr.getParty());
-        Glide.with(getContext()).load(senatorJr.getProfileImage()).placeholder(R.drawable.politician).into(senatorJrImage);
+        Glide.with(getContext()).load(senatorJr.getProfileImage()).placeholder(R.drawable.politician).transform(new RoundedCornersTransformation(radius, margin)).into(senatorJrImage);
 
         //set congressman layout views
         Politician congressman = myOfficials.getCongressman();
         congressmanName.setText(congressman.getName());
         congressmanParty.setText(congressman.getParty());
-        Glide.with(getContext()).load(congressman.getProfileImage()).placeholder(R.drawable.politician).into(congressmanImage);
+        Glide.with(getContext()).load(congressman.getProfileImage()).placeholder(R.drawable.politician).transform(new RoundedCornersTransformation(radius, margin)).into(congressmanImage);
     }
 
     //set click listeners to send to fragment with correct data

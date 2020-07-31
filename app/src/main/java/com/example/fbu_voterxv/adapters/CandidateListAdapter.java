@@ -16,6 +16,8 @@ import com.example.fbu_voterxv.models.Candidate;
 
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 public class CandidateListAdapter extends RecyclerView.Adapter<CandidateListAdapter.ViewHolder> {
 
     private Context context;
@@ -78,7 +80,9 @@ public class CandidateListAdapter extends RecyclerView.Adapter<CandidateListAdap
         public void bind(Candidate candidate) {
             candidateName.setText(candidate.getName());
             candidateParty.setText(candidate.getParty());
-            Glide.with(context).load(candidate.getProfileImage()).placeholder(R.drawable.politician).into(candidateImage);
+            int radius = 40;
+            int margin = 0;
+            Glide.with(context).load(candidate.getProfileImage()).placeholder(R.drawable.politician).transform(new RoundedCornersTransformation(radius, margin)).into(candidateImage);
             setListeners();
         }
 
