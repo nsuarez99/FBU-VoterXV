@@ -58,7 +58,7 @@ public class ElectionsFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("election", Parcels.wrap(election));
                 candidatesFragment.setArguments(bundle);
-                fragmentManager.beginTransaction().replace(R.id.layoutContainer, candidatesFragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.layoutContainer, candidatesFragment).addToBackStack(null).commit();
             }
         };
 

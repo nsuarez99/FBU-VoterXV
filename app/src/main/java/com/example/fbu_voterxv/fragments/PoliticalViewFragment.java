@@ -5,10 +5,14 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -31,6 +35,7 @@ public class PoliticalViewFragment extends Fragment {
     private Candidate candidate;
     private List<PoliticalView> politicalViews;
     private PoliticalViewAdapter adapter;
+    private GestureDetector gestureDetector;
 
     public PoliticalViewFragment() {
         // Required empty public constructor
@@ -57,5 +62,39 @@ public class PoliticalViewFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        View.OnTouchListener touchListener = new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // pass the events to the gesture detector
+                // a return value of true means the detector is handling it
+                // a return value of false means the detector didn't
+                // recognize the event
+                return gestureDetector.onTouchEvent(event);
+
+            }
+        };
+
+        gestureDetector = new GestureDetector(getContext(), new MyGestureListener());
+        recyclerView.setOnTouchListener(touchListener);
+    }
+
+    // In the SimpleOnGestureListener subclass you should override
+    // onDown and any other gesture that you want to detect.
+    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onDown(MotionEvent event) {
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent event1, MotionEvent event2,
+                               float velocityX, float velocityY) {
+            Log.d(TAG, "onFling: ");
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            fragmentManager.popBackStackImmediate();
+            return true;
+        }
     }
 }

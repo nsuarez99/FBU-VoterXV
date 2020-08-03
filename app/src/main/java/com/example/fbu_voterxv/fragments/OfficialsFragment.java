@@ -188,6 +188,6 @@ public class OfficialsFragment extends Fragment {
         bundle.putParcelable("representative", Parcels.wrap(representative));
         bundle.putParcelable("bills", Parcels.wrap(bills));
         fragment.setArguments(bundle);
-        fragmentManager.beginTransaction().replace(R.id.layoutContainer, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.layoutContainer, fragment).addToBackStack(null).commit();
     }
 }

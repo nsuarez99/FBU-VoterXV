@@ -55,25 +55,25 @@ public class BingAPI {
             RequestParams params = new RequestParams();
             params.put("q", politician.getName() + " congress");
 
-            client.get(URL, headers, params, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Headers headers, JSON json) {
-                    Log.d(TAG, "onSuccess Bing setImage");
-                    JSONObject jsonObject = json.jsonObject;
-                    try{
-                        parseImage(jsonObject.getJSONArray("value"), politician);
-                    }
-                    catch (JSONException e){
-                        Log.e(TAG, "Hit json exception while parcing, error: " + e);
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                    Log.d(TAG, String.format("onFailure Bing setImage: \nstatusCode:%d \nresponse:%s", statusCode, response));
-                }
-            });
+//            client.get(URL, headers, params, new JsonHttpResponseHandler() {
+//                @Override
+//                public void onSuccess(int statusCode, Headers headers, JSON json) {
+//                    Log.d(TAG, "onSuccess Bing setImage");
+//                    JSONObject jsonObject = json.jsonObject;
+//                    try{
+//                        parseImage(jsonObject.getJSONArray("value"), politician);
+//                    }
+//                    catch (JSONException e){
+//                        Log.e(TAG, "Hit json exception while parcing, error: " + e);
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+//                    Log.d(TAG, String.format("onFailure Bing setImage: \nstatusCode:%d \nresponse:%s", statusCode, response));
+//                }
+//            });
         }
 
 

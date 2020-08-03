@@ -7,8 +7,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -34,6 +37,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class CandidateFragment extends Fragment {
 
+    public static final String TAG = "CandidateFragment";
     private ImageView image;
     private TextView name;
     private TextView party;
@@ -43,6 +47,7 @@ public class CandidateFragment extends Fragment {
     private Candidate candidate;
     private BottomNavigationView bottomNavigationView;
     private Map<String, List<PoliticalView>> views;
+    private GestureDetector gestureDetector;
 
 
     public CandidateFragment() {
@@ -71,6 +76,7 @@ public class CandidateFragment extends Fragment {
         office = getActivity().findViewById(R.id.candidateOffice);
         bottomNavigationView = getActivity().findViewById(R.id.politicalViewsNavigation);
 
+        //set candidate info
         int radius = 40;
         int margin = 0;
         Glide.with(getContext()).load(candidate.getProfileImage()).placeholder(R.drawable.politician).transform(new RoundedCornersTransformation(radius, margin)).into(image);
@@ -121,6 +127,40 @@ public class CandidateFragment extends Fragment {
         });
         bottomNavigationView.setSelectedItemId(R.id.defensePoliticalIcon);
 
+        View.OnTouchListener touchListener = new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // pass the events to the gesture detector
+                // a return value of true means the detector is handling it
+                // a return value of false means the detector didn't
+                // recognize the event
+                return gestureDetector.onTouchEvent(event);
+
+            }
+        };
+
+        gestureDetector = new GestureDetector(getContext(), new MyGestureListener());
+        view.setOnTouchListener(touchListener);
+
+    }
+
+    // In the SimpleOnGestureListener subclass you should override
+    // onDown and any other gesture that you want to detect.
+    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onDown(MotionEvent event) {
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent event1, MotionEvent event2,
+                               float velocityX, float velocityY) {
+            Log.d(TAG, "onFling: ");
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            fragmentManager.popBackStackImmediate();
+            return true;
+        }
     }
 
 

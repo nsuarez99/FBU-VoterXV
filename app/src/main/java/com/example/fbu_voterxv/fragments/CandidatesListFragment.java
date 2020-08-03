@@ -9,7 +9,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -24,12 +27,14 @@ import java.util.List;
 
 public class CandidatesListFragment extends Fragment {
 
+    public static final String TAG = "CandidatesListFragment";
     private RecyclerView recyclerView;
     private Election election;
     private List<Candidate> candidates;
     private FragmentManager fragmentManager;
     private Fragment fragment;
     private CandidateListAdapter adapter;
+    private GestureDetector gestureDetector;
 
     public CandidatesListFragment() {
         // Required empty public constructor
@@ -64,7 +69,7 @@ public class CandidatesListFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("candidate", Parcels.wrap(candidate));
                 fragment.setArguments(bundle);
-                fragmentManager.beginTransaction().replace(R.id.layoutContainer, fragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.layoutContainer, fragment).addToBackStack(null).commit();
             }
         };
 
@@ -74,5 +79,41 @@ public class CandidatesListFragment extends Fragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(gridLayoutManager);
 
+        View.OnTouchListener touchListener = new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // pass the events to the gesture detector
+                // a return value of true means the detector is handling it
+                // a return value of false means the detector didn't
+                // recognize the event
+                return gestureDetector.onTouchEvent(event);
+
+            }
+        };
+
+        //set gesture recognizer
+        gestureDetector = new GestureDetector(getContext(), new MyGestureListener());
+        recyclerView.setOnTouchListener(touchListener);
+
+    }
+
+
+    // In the SimpleOnGestureListener subclass you should override
+    // onDown and any other gesture that you want to detect.
+    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onDown(MotionEvent event) {
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent event1, MotionEvent event2,
+                               float velocityX, float velocityY) {
+            Log.d(TAG, "onFling: ");
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            fragmentManager.popBackStackImmediate();
+            return true;
+        }
     }
 }
