@@ -305,26 +305,26 @@ public class GoogleAPI {
             params.put("num", 1);
             params.put("cx", "014531769706675276559:ohhclcewsxs");
 
-//            client.get(URL, params, new JsonHttpResponseHandler() {
-//                @Override
-//                public void onSuccess(int statusCode, Headers headers, JSON json) {
-//                    Log.d(TAG, "onSuccess setImage");
-//                    JSONObject jsonObject = json.jsonObject;
-//                    try{
-//                        parseImage(jsonObject.getJSONArray("items"), politician);
-//                    }
-//                    catch (JSONException e){
-//                        Log.e(TAG, "Hit json exception while parcing, error: " + e);
-//                        e.printStackTrace();
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-//                    Log.d(TAG, String.format("onFailure setImage: \nstatusCode:%d \nresponse:%s", statusCode, response));
-//                    BingAPI.ImageParse.setImage(politician);
-//                }
-//            });
+            client.get(URL, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Headers headers, JSON json) {
+                    Log.d(TAG, "onSuccess setImage");
+                    JSONObject jsonObject = json.jsonObject;
+                    try{
+                        parseImage(jsonObject.getJSONArray("items"), politician);
+                    }
+                    catch (JSONException e){
+                        Log.e(TAG, "Hit json exception while parcing, error: " + e);
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                    Log.d(TAG, String.format("onFailure setImage: \nstatusCode:%d \nresponse:%s", statusCode, response));
+                    BingAPI.ImageParse.setImage(politician);
+                }
+            });
         }
 
 

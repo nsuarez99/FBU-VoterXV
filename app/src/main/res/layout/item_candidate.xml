@@ -1,36 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.cardview.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:foregroundGravity="top"
-    android:padding="8dp">
+    android:layout_marginLeft="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginBottom="8dp"
+    card_view:cardBackgroundColor="#E6E6E6"
+    card_view:cardCornerRadius="30dp"
+    card_view:cardElevation="8dp">
 
-    <ImageView
-        android:id="@+id/candidateListImage"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_below="@+id/executiveTitle"
-        android:scaleType="fitCenter"
-        tools:srcCompat="@drawable/politician" />
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/candidateListName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/candidateListImage"
-        android:layout_centerHorizontal="true"
-        tools:text="Barack Obama" />
+        <ImageView
+            android:id="@+id/candidateListImage"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:scaleType="fitCenter"
+            tool:srcCompat="@drawable/politician"
+            android:foreground="?android:attr/selectableItemBackground"/>
 
-    <TextView
-        android:id="@+id/candidateListParty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/candidateListName"
-        android:layout_centerHorizontal="true"
-        tools:text="Democrat"/>
+        <TextView
+            android:id="@+id/candidateListName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/candidateListImage"
+            android:layout_centerHorizontal="true"
+            tool:text="Barack Obama" />
 
-
-</RelativeLayout>
+        <TextView
+            android:id="@+id/candidateListParty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/candidateListName"
+            android:layout_centerHorizontal="true"
+            tool:text="Democrat" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
