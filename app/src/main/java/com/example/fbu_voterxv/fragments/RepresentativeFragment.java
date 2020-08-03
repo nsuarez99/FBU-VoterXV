@@ -47,6 +47,8 @@ public class RepresentativeFragment extends Fragment {
     private BottomNavigationView bottomNavigationView;
     private Map<String, List<Bill>> bills;
     private GestureDetector gestureDetector;
+    private static final int SWIPE_MIN_DISTANCE = 120;
+    private static final int SWIPE_THRESHOLD_VELOCITY = 200;
 
 
     public RepresentativeFragment() {
@@ -176,10 +178,13 @@ public class RepresentativeFragment extends Fragment {
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
-            Log.d("TAG", "onFling: ");
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            fragmentManager.popBackStackImmediate();
-            return true;
+            if (event2.getX() - event1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                Log.d(TAG, "onFling: ");
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.popBackStackImmediate();
+                return true;
+            }
+            return false;
         }
     }
 }
