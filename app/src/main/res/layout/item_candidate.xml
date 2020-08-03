@@ -9,6 +9,7 @@
 
     <ImageView
         android:id="@+id/candidateListImage"
+        android:foreground="?android:attr/selectableItemBackground"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_below="@+id/executiveTitle"

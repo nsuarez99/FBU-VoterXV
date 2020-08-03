@@ -8,6 +8,7 @@
 
     <Button
         android:id="@+id/electionButton"
+        android:foreground="?android:attr/selectableItemBackground"
         android:layout_width="397dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/electionDate"

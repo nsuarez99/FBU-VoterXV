@@ -32,6 +32,7 @@
 
                 <ImageView
                     android:id="@+id/presidentImage"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_below="@+id/executiveTitle"
@@ -64,6 +65,7 @@
 
                 <ImageView
                     android:id="@+id/vicePresidentImage"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_below="@+id/executiveTitle"
@@ -112,6 +114,7 @@
 
                 <ImageView
                     android:id="@+id/senatorSrImage"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_below="@+id/senatorTitle"
@@ -144,6 +147,7 @@
 
                 <ImageView
                     android:id="@+id/senatorJrImage"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_below="@+id/senatorTitle"
@@ -192,6 +196,7 @@
 
                 <ImageView
                     android:id="@+id/congressmanImage"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_below="@+id/congressmanTitle"
