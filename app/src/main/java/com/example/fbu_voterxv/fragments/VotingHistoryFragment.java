@@ -43,7 +43,8 @@ public class VotingHistoryFragment extends Fragment {
     private Representative representative;
     private Map<Bill, String> votes;
     private GestureDetector gestureDetector;
-
+    private static final int SWIPE_MIN_DISTANCE = 250;
+    private static final int SWIPE_THRESHOLD_VELOCITY = 200;
 
     public VotingHistoryFragment() {
         // Required empty public constructor
@@ -344,10 +345,16 @@ public class VotingHistoryFragment extends Fragment {
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
-            Log.d(TAG, "onFling: ");
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            fragmentManager.popBackStackImmediate();
-            return true;
+            if (event1 == null || event2 == null){
+                return false;
+            }
+            if (event2.getX() - event1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                Log.d(TAG, "onFling: ");
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.popBackStackImmediate();
+                return true;
+            }
+            return false;
         }
     }
 
